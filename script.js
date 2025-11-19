@@ -37,7 +37,7 @@ const images = Array.from({length: 20}).map((_, i) => {
 // NOTE: If you paste a full YouTube share URL or include query params (e.g. '?si=...') the script will sanitize it.
 const videos = [
   // legacy-style entries (no 'type') will be treated as YouTube automatically and sanitized
-  { id: 'YO535HHbZpg?si=qX4im20DACxvY_D-', title: 'The Cynosure of art and skills', date: '2025-10-15T12:00:00Z' },
+  { id: 'YO535HHbZpg?si=qX4im20DACxvY_D-', title: 'The Cynosure of art and skills', date: '' },
   { id: 'kJQP7kiw5Fk', title: 'NSS Awareness Drive', date: '2025-10-20T12:00:00Z' },
   { id: '3JZ_D3ELwOQ', title: 'Community Service Highlights', date: '2025-10-25T12:00:00Z' },
   { id: '9bZkp7q19f0', title: 'Tree Planting Program', date: '2025-10-27T12:00:00Z' },
@@ -387,289 +387,289 @@ const firstYear = [
         id: '1Y-03',
         name: 'ABINAS S',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/ABINAS-S.jpg'
+        photo: 'images/volunteers/2025-27/ABINAS-S.JPG'
     },
     {
         id: '1Y-04',
         name: 'ADHAL S',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/ADHAL-S.jpg'
+        photo: 'images/volunteers/2025-27/ADHAL-S.JPG'
     },
     {
         id: '1Y-05',
         name: 'ADITHYA BINU',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/ADITHYA-BINU.jpg'
+        photo: 'images/volunteers/2025-27/ADITHYA-BINU.JPG'
     },
     {
         id: '1Y-06',
         name: 'ADITHYAN S',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/ADITHYAN-S.jpg'
+        photo: 'images/volunteers/2025-27/ADITHYAN-S.JPG'
     },
     {
         id: '1Y-07',
         name: 'AISWARYA RS',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/AISWARYA-RS.jpg'
+        photo: 'images/volunteers/2025-27/AISWARYA-RS.JPG'
     },
     {
         id: '1Y-08',
         name: 'AJMAL MUHAMMAD S',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/AJMAL-MUHAMMAD-S.jpg'
+        photo: 'images/volunteers/2025-27/AJMAL-MUHAMMAD-S.JPG'
     },
     {
         id: '1Y-09',
         name: 'AL AMEEN S',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/AL-AMEEN-S.jpg'
+        photo: 'images/volunteers/2025-27/AL-AMEEN-S.JPG'
     },
     {
         id: '1Y-10',
         name: 'AL FARIS ASHARAF',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/AL-FARIS-ASHARAF.jpg'
+        photo: 'images/volunteers/2025-27/AL-FARIS-ASHARAF.JPG'
     },
     {
         id: '1Y-11',
         name: 'ALFIYA S',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/ALFIYA-S.jpg'
+        photo: 'images/volunteers/2025-27/ALFIYA-S.JPG'
     },
     {
         id: '1Y-12',
         name: 'AMINA NIZAM',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/AMINA-NIZAM.jpg'
+        photo: 'images/volunteers/2025-27/AMINA-NIZAM.JPG'
     },
     {
         id: '1Y-13',
         name: 'ANANTHAN NARAYANAN SR',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/ANANTHAN-NARAYANAN-SR.jpg'
+        photo: 'images/volunteers/2025-27/ANANTHAN-NARAYANAN-SR.JPG'
     },
     {
         id: '1Y-14',
         name: 'ANFIYA NN',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/ANFIYA-NN.jpg'
+        photo: 'images/volunteers/2025-27/ANFIYA-NN.JPG'
     },
     {
         id: '1Y-15',
         name: 'ANJANA AJITH',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/ANJANA-AJITH.jpg'
+        photo: 'images/volunteers/2025-27/ANJANA-AJITH.JPG'
     },
     {
         id: '1Y-16',
         name: 'ANSHA SHAM',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/ANSHA-SHAM.jpg'
+        photo: 'images/volunteers/2025-27/ANSHA-SHAM.JPG'
     },
     {
         id: '1Y-17',
         name: 'ANZIL SALIM',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/ANZIL-SALIM.jpg'
+        photo: 'images/volunteers/2025-27/ANZIL-SALIM.JPG'
     },
     {
         id: '1Y-18',
         name: 'ANZAR A',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/ANZAR-A.jpg'
+        photo: 'images/volunteers/2025-27/ANZAR-A.JPG'
     },
     {
         id: '1Y-19',
         name: 'APSARA AJ',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/APSARA-AJ.jpg'
+        photo: 'images/volunteers/2025-27/APSARA-AJ.JPG'
     },
     {
         id: '1Y-20',
         name: 'ARADHYA SJ',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/ARADHYA-SJ.jpg'
+        photo: 'images/volunteers/2025-27/ARADHYA-SJ.JPG'
     },
     {
         id: '1Y-21',
         name: 'ARPPITHA BS',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/ARPPITHA-BS.jpg'
+        photo: 'images/volunteers/2025-27/ARPPITHA-BS.JPG'
     },
     {
         id: '1Y-22',
         name: 'ARUN M',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/ARUN-M.jpg'
+        photo: 'images/volunteers/2025-27/ARUN-M.JPG'
     },
     {
         id: '1Y-23',
         name: 'ARYAJITH A',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/ARYAJITH-A.jpg'
+        photo: 'images/volunteers/2025-27/ARYAJITH-A.JPG'
     },
     {
         id: '1Y-24',
         name: 'ASHIK S',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/ASHIK-S.jpg'
+        photo: 'images/volunteers/2025-27/ASHIK-S.JPG'
     },
     {
         id: '1Y-25',
         name: 'DAYA DEEPAN',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/DAYA-DEEPAN.jpg'
+        photo: 'images/volunteers/2025-27/DAYA-DEEPAN.JPG'
     },
     {
         id: '1Y-26',
         name: 'DEVANANDHA SS',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/DEVANANDHA-SS.jpg'
+        photo: 'images/volunteers/2025-27/DEVANANDHA-SS.JPG'
     },
     {
         id: '1Y-27',
         name: 'DIYA DEEPAN',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/DIYA-DEEPAN.jpg'
+        photo: 'images/volunteers/2025-27/DIYA-DEEPAN.JPG'
     },
     {
         id: '1Y-28',
         name: 'FARHANA F',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/FARHANA-F.jpg'
+        photo: 'images/volunteers/2025-27/FARHANA-F.JPG'
     },
     {
         id: '1Y-29',
         name: 'GANGA-LAKSHMI',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/GANGA-LAKSHMI.jpg'
+        photo: 'images/volunteers/2025-27/GANGA-LAKSHMI.JPG'
     },
     {
         id: '1Y-30',
         name: 'GOPIKA G',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/GOPIKA-G.jpg'
+        photo: 'images/volunteers/2025-27/GOPIKA-G.JPG'
     },
     {
         id: '1Y-31',
         name: 'HAJIRA R',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/HAJIRA-R.jpg'
+        photo: 'images/volunteers/2025-27/HAJIRA-R.JPG'
     },
     {
         id: '1Y-32',
         name: 'HARINANDAN R',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/HARINANDAN-R.jpg'
+        photo: 'images/volunteers/2025-27/HARINANDAN-R.JPG'
     },
     {
         id: '1Y-33',
         name: 'IHSAN SAJEER',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/IHSAN-SAJEER.jpg'
+        photo: 'images/volunteers/2025-27/IHSAN-SAJEER.JPG'
     },
     {
         id: '1Y-34',
         name: 'INJAS AHAMMED K H',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/INJAS-AHAMMED-KH.jpg'
+        photo: 'images/volunteers/2025-27/INJAS-AHAMMED-KH.JPG'
     },
     {
         id: '1Y-35',
         name: 'MEENAKSHI BG',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/MEENAKSHI-BG.jpg'
+        photo: 'images/volunteers/2025-27/MEENAKSHI-BG.JPG'
     },
     {
         id: '1Y-36',
         name: 'MOULANA MUHAMMED M',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/MOULANA-MUHAMMED-M.jpg'
+        photo: 'images/volunteers/2025-27/MOULANA-MUHAMMED-M.JPG'
     },
     {
         id: '1Y-37',
         name: 'MUHAMMED ALIF A',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/MUHAMMED-ALIF-A.jpg'
+        photo: 'images/volunteers/2025-27/MUHAMMED-ALIF-A.JPG'
     },
     {
         id: '1Y-38',
         name: 'MUHAMMED IRFAN A',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/MUHAMMED-IRFAN-A.jpg'
+        photo: 'images/volunteers/2025-27/MUHAMMED-IRFAN-A.JPG'
     },
     {
         id: '1Y-39',
         name: 'MUHAMMED IRFAN F',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/MUHAMMED-IRFAN-F.jpg'
+        photo: 'images/volunteers/2025-27/MUHAMMED-IRFAN-F.JPG'
     },
     {
         id: '1Y-40',
         name: 'MUHAMMAD SHA SIRAJ',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/MUHAMMAD-SHA-SIRAJ.jpg'
+        photo: 'images/volunteers/2025-27/MUHAMMAD-SHA-SIRAJ.JPG'
     },
     {
         id: '1Y-41',
         name: 'RHUTHUL KRISHNA SR',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/RHUTHUL-KRISHNA-SR.jpg'
+        photo: 'images/volunteers/2025-27/RHUTHUL-KRISHNA-SR.JPG'
     },
     {
         id: '1Y-42',
         name: 'SAFNA N',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/SAFNA-N.jpg'
+        photo: 'images/volunteers/2025-27/SAFNA-N.JPG'
     },
     {
         id: '1Y-43',
         name: 'SAHAL A S',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/SAHAL-AS.jpg'
+        photo: 'images/volunteers/2025-27/SAHAL-AS.JPG'
     },
     {
         id: '1Y-44',
         name: 'SHAFNA FATHIMA',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/SHAFNA-FATHIMA.jpg'
+        photo: 'images/volunteers/2025-27/SHAFNA-FATHIMA.JPG'
     },
     {
         id: '1Y-45',
         name: 'SHAHANA NR',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/SHAHANA-NR.jpg'
+        photo: 'images/volunteers/2025-27/SHAHANA-NR.JPG'
     },
     {
         id: '1Y-46',
         name: 'SOORAJ S',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/SOORAJ-S.jpg'
+        photo: 'images/volunteers/2025-27/SOORAJ-S.JPG'
     },
     {
         id: '1Y-47',
         name: 'SREEHARI RS',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/SREEHARI-RS.jpg'
+        photo: 'images/volunteers/2025-27/SREEHARI-RS.JPG'
     },
     {
         id: '1Y-48',
         name: 'SREELAKSHMI AS',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/SREELAKSHMI-AS.jpg'
+        photo: 'images/volunteers/2025-27/SREELAKSHMI-AS.JPG'
     },
     {
         id: '1Y-49',
         name: 'SYAM SANTHOSH',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/SYAM-SANTHOSH.jpg'
+        photo: 'images/volunteers/2025-27/SYAM-SANTHOSH.JPG'
     },
     {
         id: '1Y-50',
         name: 'THANZEELA S',
         class: '11-A', // Placeholder class
-        photo: 'images/volunteers/2025-27/THANZEELA-S.jpg'
+        photo: 'images/volunteers/2025-27/THANZEELA-S.JPG'
     }
 ];
 
