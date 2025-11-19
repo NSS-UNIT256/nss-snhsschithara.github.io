@@ -78,295 +78,295 @@ const secondYear = [
     id: '2Y-02',
     name: 'NAKSHATHRA B',
     class: '+2-Biology Science A (Leader)',
-    photo: 'images/volunteers/2024-26/2.jpeg'
+    photo: 'images/volunteers/2024-26/2.JPEG'
   },
   {
     id: '2Y-03',
     name: 'ABHIRAMI BS',
     class: '+2-Biology Science A',
-    photo: 'images/volunteers/2024-26/ABHIRAMI-BS.jpeg'
+    photo: 'images/volunteers/2024-26/ABHIRAMI-BS.JPEG'
   },
   {
     id: '2Y-04',
     name: 'ABHIJITH RD',
     class:'',
-    photo: 'images/volunteers/2024-26/ABHIJITH-RD.jpeg'
+    photo: 'images/volunteers/2024-26/ABHIJITH-RD.JPEG'
   },
   {
     id: '2Y-05',
     name: 'ABHINAV SL',
     class: '+2-Computer Science B',
-    photo: 'images/volunteers/2024-26/ABHINAV-SL.jpeg'
+    photo: 'images/volunteers/2024-26/ABHINAV-SL.JPEG'
   },
   {
     id: '2Y-06',
     name: 'ABHIRAM JAYAKUMAR',
     class: '+2-omputer Science A',
-    photo: 'images/volunteers/2024-26/ABHIRAM-JAYAKUMAR.jpeg'
+    photo: 'images/volunteers/2024-26/ABHIRAM-JAYAKUMAR.JPEG'
   },
   {
     id: '2Y-07',
     name: 'ABHISHEK S S',
     class: '+2-Humanities',
-    photo: 'images/volunteers/2024-26/ABHISHEK-SS.jpeg'
+    photo: 'images/volunteers/2024-26/ABHISHEK-SS.JPEG'
   },
   {
     id: '2Y-08',
     name: 'ABHISHEK V',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/ABHISHEK-V.jpeg'
+    photo: 'images/volunteers/2024-26/ABHISHEK-V.JPEG'
   },
   {
     id: '2Y-09',
     name: 'ADITHYAN VS',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/ADITHYAN-VS.jpeg'
+    photo: 'images/volunteers/2024-26/ADITHYAN-VS.JPEG'
   },
   {
     id: '2Y-10',
     name: 'AJMALSHA NB',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/AJMAL-SHA-NB.jpeg'
+    photo: 'images/volunteers/2024-26/AJMAL-SHA-NB.JPEG'
   },
   {
     id: '2Y-11',
     name: 'AKASH AS',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/AKASH-AS.jpeg'
+    photo: 'images/volunteers/2024-26/AKASH-AS.JPEG'
   },
   {
     id: '2Y-12',
     name: 'ALEENA F',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/ALEENA-F.jpeg'
+    photo: 'images/volunteers/2024-26/ALEENA-F.JPEG'
   },
   {
     id: '2Y-13',
     name: 'ALFIYA SS',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/ALFIYA-SS.jpeg'
+    photo: 'images/volunteers/2024-26/ALFIYA-SS.JPEG'
   },
   {
     id: '2Y-14',
     name: 'ALHUDA N',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/ALHUDA-N.jpeg'
+    photo: 'images/volunteers/2024-26/ALHUDA-N.JPEG'
   },
   {
     id: '2Y-15',
     name: 'AMAL LS',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/AMAL-LS.jpeg'
+    photo: 'images/volunteers/2024-26/AMAL-LS.JPEG'
   },
   {
     id: '2Y-16',
     name: 'ANAMIKA SB',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/ANAMIKA-SB.jpeg'
+    photo: 'images/volunteers/2024-26/ANAMIKA-SB.JPEG'
   },
   {
     id: '2Y-17',
     name: 'ANANYA SUJITH',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/ANANYA-SUJITH.jpeg'
+    photo: 'images/volunteers/2024-26/ANANYA-SUJITH.JPEG'
   },
   {
     id: '2Y-18',
     name: 'ANSALNA S',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/ANSALNA-S.jpeg'
+    photo: 'images/volunteers/2024-26/ANSALNA-S.JPEG'
   },
   {
     id: '2Y-19',
     name: 'ARDRA SR',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/ARDRA-SR.jpeg'
+    photo: 'images/volunteers/2024-26/ARDRA-SR.JPEG'
   },
   {
     id: '2Y-20',
     name: 'ARJUN RD',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/ARJUN-RD.jpeg'
+    photo: 'images/volunteers/2024-26/ARJUN-RD.JPEG'
   },
   {
     id: '2Y-21',
     name: 'ASIF N',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/ASIF-N.jpeg'
+    photo: 'images/volunteers/2024-26/ASIF-N.JPEG'
   },
   {
     id: '2Y-22',
     name: 'BHAMA N MANOJ',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/BHAMA-N-MANOJ.jpeg'
+    photo: 'images/volunteers/2024-26/BHAMA-N-MANOJ.JPEG'
   },
   {
     id: '2Y-23',
     name: 'BIBIN KRISHNA B',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/BIBIN-KRISHNA-B.jpeg'
+    photo: 'images/volunteers/2024-26/BIBIN-KRISHNA-B.JPEG'
   },
   {
     id: '2Y-24',
     name: 'BLESSY MERIN JOY',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/BLESSY-MERIN-JOY.jpeg'
+    photo: 'images/volunteers/2024-26/BLESSY-MERIN-JOY.JPEG'
   },
   {
     id: '2Y-25',
     name: 'DEVIKA AS',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/DEVIKA-AS.jpeg'
+    photo: 'images/volunteers/2024-26/DEVIKA-AS.JPEG'
   },
   {
     id: '2Y-26',
     name: 'DEVIKA V',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/DEVIKA-V.jpeg'
+    photo: 'images/volunteers/2024-26/DEVIKA-V.JPEG'
   },
   {
     id: '2Y-27',
     name: 'DIYA SALIM',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/DIYA-SALIM.jpeg'
+    photo: 'images/volunteers/2024-26/DIYA-SALIM.JPEG'
   },
   {
     id: '2Y-28',
     name: 'DIYAJITH S',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/DIYAJITH-S.jpeg'
+    photo: 'images/volunteers/2024-26/DIYAJITH-S.JPEG'
   },
   {
     id: '2Y-29',
     name: 'DRISHYA PRASANTH',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/DRISHYA-PRASANTH.jpeg'
+    photo: 'images/volunteers/2024-26/DRISHYA-PRASANTH.JPEG'
   },
   {
     id: '2Y-30',
     name: 'GOURI DEVANANDA P',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/GOURI-DEVANANDA-P.jpeg'
+    photo: 'images/volunteers/2024-26/GOURI-DEVANANDA-P.JPEG'
   },
   {
     id: '2Y-31',
     name: 'GOURI S NAIR',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/GOURI-S-NAIR.jpeg'
+    photo: 'images/volunteers/2024-26/GOURI-S-NAIR.JPEG'
   },
   {
     id: '2Y-32',
     name: 'IRFAN S SIDHEEK',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/IRFAN-S-SIDHEEK.jpeg'
+    photo: 'images/volunteers/2024-26/IRFAN-S-SIDHEEK.JPEG'
   },
   {
     id: '2Y-33',
     name: 'KEERTHI MS',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/KEERTHI-MS.jpeg'
+    photo: 'images/volunteers/2024-26/KEERTHI-MS.JPEG'
   },
   {
     id: '2Y-34',
     name: 'MIDHUNA BM',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/MIDHUNA-BM.jpeg'
+    photo: 'images/volunteers/2024-26/MIDHUNA-BM.JPEG'
   },
   {
     id: '2Y-35',
     name: 'MINHA SHAFI',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/MINHA-SHAFI.jpeg'
+    photo: 'images/volunteers/2024-26/MINHA-SHAFI.JPEG'
   },
   {
     id: '2Y-36',
     name: 'MUHAMMED ADIL B',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/MUHAMMED-ADIL-B.jpeg'
+    photo: 'images/volunteers/2024-26/MUHAMMED-ADIL-B.JPEG'
   },
   {
     id: '2Y-37',
     name: 'MUHAMMED ALTHAF A',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/MUHAMMED-ALTHAF-A.jpeg'
+    photo: 'images/volunteers/2024-26/MUHAMMED-ALTHAF-A.JPEG'
   },
   {
     id: '2Y-38',
     name: 'MUHAMMED ASIF S',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/MUHAMMED-ASIF-S.jpeg'
+    photo: 'images/volunteers/2024-26/MUHAMMED-ASIF-S.JPEG'
   },
   {
     id: '2Y-39',
     name: 'MOHAMMED IMDAD',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/MOHAMMED-IMDAD.jpeg'
+    photo: 'images/volunteers/2024-26/MOHAMMED-IMDAD.JPEG'
   },
   {
     id: '2Y-40',
     name: 'MUHAMMED NAHSIN N',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/MUHAMMAD-NAHSIN-N.jpeg'
+    photo: 'images/volunteers/2024-26/MUHAMMAD-NAHSIN-N.JPEG'
   },
   {
     id: '2Y-41',
     name: 'MUHAMMAD NOUFAL Z',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/MUHAMMAD-NOUFAL-Z.jpeg'
+    photo: 'images/volunteers/2024-26/MUHAMMAD-NOUFAL-Z.JPEG'
   },
   {
     id: '2Y-42',
     name: 'MUHAMMED SAFEER S',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/MUHAMMED-SAFEER-S.jpeg'
+    photo: 'images/volunteers/2024-26/MUHAMMED-SAFEER-S.JPEG'
   },
   {
     id: '2Y-43',
     name: 'MUHAMMED SAFIN SS',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/MUHAMMED-SAFIN-SS.jpeg'
+    photo: 'images/volunteers/2024-26/MUHAMMED-SAFIN-SS.JPEG'
   },
   {
     id: '2Y-44',
     name: 'NANDANA S',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/NANDANA-S.jpeg'
+    photo: 'images/volunteers/2024-26/NANDANA-S.JPEG'
   },
   {
     id: '2Y-45',
     name: 'NIHAL MUHAMMAD F',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/NIHAL-MUHAMMAD-F.jpeg'
+    photo: 'images/volunteers/2024-26/NIHAL-MUHAMMAD-F.JPEG'
   },
   {
     id: '2Y-46',
     name: 'SANA FATHIMA',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/SANA-FATHIMA.jpeg'
+    photo: 'images/volunteers/2024-26/SANA-FATHIMA.JPEG'
   },
   {
     id: '2Y-47',
     name: 'SANA FATHIMA S',
     class: '+2 Biology Science B',
-    photo: 'images/volunteers/2024-26/SANA-FATHIMA-S.jpeg'
+    photo: 'images/volunteers/2024-26/SANA-FATHIMA-S.JPEG'
   },
   {
     id: '2Y-48',
     name: 'SREEHARI D',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/SREEHARI-D.jpeg'
+    photo: 'images/volunteers/2024-26/SREEHARI-D.JPEG'
   },
   {
     id: '2Y-49',
     name: 'THASNIYA JAFAR S',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/THASNIYA-JAFAR-S.jpeg'
+    photo: 'images/volunteers/2024-26/THASNIYA-JAFAR-S.JPEG'
   },
   {
     id: '2Y-50',
     name: 'VISHAK V',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/VISHAK-V.jpeg'
+    photo: 'images/volunteers/2024-26/VISHAK-V.JPEG'
   }
 ];
 
@@ -375,13 +375,13 @@ const firstYear = [
     id: '1Y-01',
     name: 'MUHAMMED SAHIL',
     class: '+1-Computer Science B (Leader)',
-    photo: 'images/volunteers/2025-27/1.jpeg'
+    photo: 'images/volunteers/2025-27/1.JPEG'
   },
   {
     id: '1Y-02',
     name: 'AFSANA S SHAIJU',
     class: '+1-Biology Science B (Leader)',
-    photo: 'images/volunteers/2025-27/2.jpeg'
+    photo: 'images/volunteers/2025-27/2.JPEG'
   },
     {
         id: '1Y-03',
