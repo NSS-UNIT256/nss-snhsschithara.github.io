@@ -1,0 +1,1159 @@
+// Main client script for NSS website (updated)
+// - Improved video support (YouTube/Vimeo/local) with fallback when embedding is blocked (file:// or owner disabled embedding)
+// - Sanitizes YouTube IDs/URLs so embedding doesn't break when an ID contains query params
+// - Preserves your volunteer data and translations
+// - Detects file:// and shows clickable thumbnails instead of iframes
+//
+// Replace your existing script.js with this file.
+
+
+// Configuration: FILL THESE
+// ---------------------------
+const YT_API_KEY = 'AIzaSyCmda7YFfugrv2oRsEwBuSpZoO5XGceGUk'; // <-- Put your YouTube Data API v3 key here (or leave empty to disable auto-fetch)
+const YT_CHANNEL_ID = 'UCNYUD1HguwfAJdn8d_gVZ_Q'; // <-- Put your channel's ID (starts with "UC...") here
+const YT_MAX_RESULTS = 12; // how many recent videos to fetch
+const YT_CACHE_TTL = 10 * 60 * 1000; // cache in ms (10 minutes)
+
+// ---------------------------
+// Data (images, videos placeholder)
+// ---------------------------
+
+// images (replace with your own)
+const images = Array.from({length: 20}).map((_, i) => {
+  const id = i + 1;
+  return {
+    id,
+    title: `NSS Event Photo ${id}`,
+    src: `logo.png${id}`,
+    date: new Date(Date.UTC(2025, 10, Math.max(1, 28 - i))).toISOString()
+  };
+});
+
+// Videos: you provided some YouTube IDs. We support three types:
+// - YouTube: { type: 'youtube', id: 'VIDEO_ID' }  OR legacy { id: 'VIDEO_ID_OR_URL' }
+// - Vimeo:   { type: 'vimeo', id: 'VIMEO_ID' }
+// - Local:   { type: 'local', src: 'videos/name.mp4', poster: 'images/poster.jpg' }
+//
+// NOTE: If you paste a full YouTube share URL or include query params (e.g. '?si=...') the script will sanitize it.
+const videos = [
+  // legacy-style entries (no 'type') will be treated as YouTube automatically and sanitized
+  { id: 'YO535HHbZpg?si=qX4im20DACxvY_D-', title: 'The Cynosure of art and skills', date: '2025-10-15T12:00:00Z' },
+  { id: 'kJQP7kiw5Fk', title: 'NSS Awareness Drive', date: '2025-10-20T12:00:00Z' },
+  { id: '3JZ_D3ELwOQ', title: 'Community Service Highlights', date: '2025-10-25T12:00:00Z' },
+  { id: '9bZkp7q19f0', title: 'Tree Planting Program', date: '2025-10-27T12:00:00Z' },
+  { id: 'fJ9rUzIMcZQ', title: 'Health Camp', date: '2025-10-28T12:00:00Z' },
+  { id: 'e-ORhEE9VVg', title: 'Workshop: Leadership', date: '2025-09-10T12:00:00Z' },
+  { id: 'uelHwf8o7_U', title: 'Clean-up Drive', date: '2025-09-20T12:00:00Z' },
+
+  // Example of explicitly typed entries:
+  // { type: 'vimeo', id: '76979871', title: 'Vimeo Sample', date: '2025-09-01T12:00:00Z' },
+  // { type: 'local', src: 'videos/health-camp.mp4', poster: 'images/posters/health-camp.jpg', title: 'Health Camp (Local)', date: '2025-10-28T12:00:00Z' }
+];
+
+// ---------------------------
+// Volunteers (your provided lists kept intact)
+// ---------------------------
+
+// Helper to generate fallback volunteers if needed (not used for your explicit arrays)
+function makeVolunteers(prefix, yearLabel) {
+  return Array.from({length:50}).map((_, idx) => {
+    const num = String(idx+1).padStart(2, '0');
+    return {
+      id: `${prefix}-${num}`,
+      name: `${yearLabel} Volunteer ${num}`,
+      class: (Math.floor(Math.random()*2) === 0) ? `12-A` : `12-B`,
+      photo: `https://i.pravatar.cc/300?img=${(idx % 70) + 1}`
+    };
+  });
+}
+
+const secondYear = [
+  {
+    id: '2Y-01',
+    name: 'MUHAMMAD JR',
+    class: '+2-Computer Science B (Leader)',
+    photo: 'images/volunteers/2024-26/1.jpg'
+  },
+  {
+    id: '2Y-02',
+    name: 'NAKSHATHRA B',
+    class: '+2-Biology Science A (Leader)',
+    photo: 'images/volunteers/2024-26/2.jpeg'
+  },
+  {
+    id: '2Y-03',
+    name: 'ABHIRAMI BS',
+    class: '+2-Biology Science A',
+    photo: 'images/volunteers/2024-26/ABHIRAMI-BS.jpeg'
+  },
+  {
+    id: '2Y-04',
+    name: 'ABHIJITH RD',
+    class:'',
+    photo: 'images/volunteers/2024-26/ABHIJITH-RD.jpeg'
+  },
+  {
+    id: '2Y-05',
+    name: 'ABHINAV SL',
+    class: '+2-Computer Science B',
+    photo: 'images/volunteers/2024-26/ABHINAV-SL.jpeg'
+  },
+  {
+    id: '2Y-06',
+    name: 'ABHIRAM JAYAKUMAR',
+    class: '+2-omputer Science A',
+    photo: 'images/volunteers/2024-26/ABHIRAM-JAYAKUMAR.jpeg'
+  },
+  {
+    id: '2Y-07',
+    name: 'ABHISHEK S S',
+    class: '+2-Humanities',
+    photo: 'images/volunteers/2024-26/ABHISHEK-SS.jpeg'
+  },
+  {
+    id: '2Y-08',
+    name: 'ABHISHEK V',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/ABHISHEK-V.jpeg'
+  },
+  {
+    id: '2Y-09',
+    name: 'ADITHYAN VS',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/ADITHYAN-VS.jpeg'
+  },
+  {
+    id: '2Y-10',
+    name: 'AJMALSHA NB',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/AJMAL-SHA-NB.jpeg'
+  },
+  {
+    id: '2Y-11',
+    name: 'AKASH AS',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/AKASH-AS.jpeg'
+  },
+  {
+    id: '2Y-12',
+    name: 'ALEENA F',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/ALEENA-F.jpeg'
+  },
+  {
+    id: '2Y-13',
+    name: 'ALFIYA SS',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/ALFIYA-SS.jpeg'
+  },
+  {
+    id: '2Y-14',
+    name: 'ALHUDA N',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/ALHUDA-N.jpeg'
+  },
+  {
+    id: '2Y-15',
+    name: 'AMAL LS',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/AMAL-LS.jpeg'
+  },
+  {
+    id: '2Y-16',
+    name: 'ANAMIKA SB',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/ANAMIKA-SB.jpeg'
+  },
+  {
+    id: '2Y-17',
+    name: 'ANANYA SUJITH',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/ANANYA-SUJITH.jpeg'
+  },
+  {
+    id: '2Y-18',
+    name: 'ANSALNA S',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/ANSALNA-S.jpeg'
+  },
+  {
+    id: '2Y-19',
+    name: 'ARDRA SR',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/ARDRA-SR.jpeg'
+  },
+  {
+    id: '2Y-20',
+    name: 'ARJUN RD',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/ARJUN-RD.jpeg'
+  },
+  {
+    id: '2Y-21',
+    name: 'ASIF N',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/ASIF-N.jpeg'
+  },
+  {
+    id: '2Y-22',
+    name: 'BHAMA N MANOJ',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/BHAMA-N-MANOJ.jpeg'
+  },
+  {
+    id: '2Y-23',
+    name: 'BIBIN KRISHNA B',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/BIBIN-KRISHNA-B.jpeg'
+  },
+  {
+    id: '2Y-24',
+    name: 'BLESSY MERIN JOY',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/BLESSY-MERIN-JOY.jpeg'
+  },
+  {
+    id: '2Y-25',
+    name: 'DEVIKA AS',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/DEVIKA-AS.jpeg'
+  },
+  {
+    id: '2Y-26',
+    name: 'DEVIKA V',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/DEVIKA-V.jpeg'
+  },
+  {
+    id: '2Y-27',
+    name: 'DIYA SALIM',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/DIYA-SALIM.jpeg'
+  },
+  {
+    id: '2Y-28',
+    name: 'DIYAJITH S',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/DIYAJITH-S.jpeg'
+  },
+  {
+    id: '2Y-29',
+    name: 'DRISHYA PRASANTH',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/DRISHYA-PRASANTH.jpeg'
+  },
+  {
+    id: '2Y-30',
+    name: 'GOURI DEVANANDA P',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/GOURI-DEVANANDA-P.jpeg'
+  },
+  {
+    id: '2Y-31',
+    name: 'GOURI S NAIR',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/GOURI-S-NAIR.jpeg'
+  },
+  {
+    id: '2Y-32',
+    name: 'IRFAN S SIDHEEK',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/IRFAN-S-SIDHEEK.jpeg'
+  },
+  {
+    id: '2Y-33',
+    name: 'KEERTHI MS',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/KEERTHI-MS.jpeg'
+  },
+  {
+    id: '2Y-34',
+    name: 'MIDHUNA BM',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/MIDHUNA-BM.jpeg'
+  },
+  {
+    id: '2Y-35',
+    name: 'MINHA SHAFI',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/MINHA-SHAFI.jpeg'
+  },
+  {
+    id: '2Y-36',
+    name: 'MUHAMMED ADIL B',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/MUHAMMED-ADIL-B.jpeg'
+  },
+  {
+    id: '2Y-37',
+    name: 'MUHAMMED ALTHAF A',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/MUHAMMED-ALTHAF-A.jpeg'
+  },
+  {
+    id: '2Y-38',
+    name: 'MUHAMMED ASIF S',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/MUHAMMED-ASIF-S.jpeg'
+  },
+  {
+    id: '2Y-39',
+    name: 'MOHAMMED IMDAD',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/MOHAMMED-IMDAD.jpeg'
+  },
+  {
+    id: '2Y-40',
+    name: 'MUHAMMED NAHSIN N',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/MUHAMMAD-NAHSIN-N.jpeg'
+  },
+  {
+    id: '2Y-41',
+    name: 'MUHAMMAD NOUFAL Z',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/MUHAMMAD-NOUFAL-Z.jpeg'
+  },
+  {
+    id: '2Y-42',
+    name: 'MUHAMMED SAFEER S',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/MUHAMMED-SAFEER-S.jpeg'
+  },
+  {
+    id: '2Y-43',
+    name: 'MUHAMMED SAFIN SS',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/MUHAMMED-SAFIN-SS.jpeg'
+  },
+  {
+    id: '2Y-44',
+    name: 'NANDANA S',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/NANDANA-S.jpeg'
+  },
+  {
+    id: '2Y-45',
+    name: 'NIHAL MUHAMMAD F',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/NIHAL-MUHAMMAD-F.jpeg'
+  },
+  {
+    id: '2Y-46',
+    name: 'SANA FATHIMA',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/SANA-FATHIMA.jpeg'
+  },
+  {
+    id: '2Y-47',
+    name: 'SANA FATHIMA S',
+    class: '+2 Biology Science B',
+    photo: 'images/volunteers/2024-26/SANA-FATHIMA-S.jpeg'
+  },
+  {
+    id: '2Y-48',
+    name: 'SREEHARI D',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/SREEHARI-D.jpeg'
+  },
+  {
+    id: '2Y-49',
+    name: 'THASNIYA JAFAR S',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/THASNIYA-JAFAR-S.jpeg'
+  },
+  {
+    id: '2Y-50',
+    name: 'VISHAK V',
+    class: '12-C',
+    photo: 'images/volunteers/2024-26/VISHAK-V.jpeg'
+  }
+];
+
+const firstYear = [
+  {
+    id: '1Y-01',
+    name: 'MUHAMMED SAHIL',
+    class: '+1-Computer Science B (Leader)',
+    photo: 'images/volunteers/2025-27/1.jpeg'
+  },
+  {
+    id: '1Y-02',
+    name: 'AFSANA S SHAIJU',
+    class: '+1-Biology Science B (Leader)',
+    photo: 'images/volunteers/2025-27/2.jpeg'
+  },
+    {
+        id: '1Y-03',
+        name: 'ABINAS S',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/ABINAS-S.jpg'
+    },
+    {
+        id: '1Y-04',
+        name: 'ADHAL S',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/ADHAL-S.jpg'
+    },
+    {
+        id: '1Y-05',
+        name: 'ADITHYA BINU',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/ADITHYA-BINU.jpg'
+    },
+    {
+        id: '1Y-06',
+        name: 'ADITHYAN S',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/ADITHYAN-S.jpg'
+    },
+    {
+        id: '1Y-07',
+        name: 'AISWARYA RS',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/AISWARYA-RS.jpg'
+    },
+    {
+        id: '1Y-08',
+        name: 'AJMAL MUHAMMAD S',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/AJMAL-MUHAMMAD-S.jpg'
+    },
+    {
+        id: '1Y-09',
+        name: 'AL AMEEN S',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/AL-AMEEN-S.jpg'
+    },
+    {
+        id: '1Y-10',
+        name: 'AL FARIS ASHARAF',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/AL-FARIS-ASHARAF.jpg'
+    },
+    {
+        id: '1Y-11',
+        name: 'ALFIYA S',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/ALFIYA-S.jpg'
+    },
+    {
+        id: '1Y-12',
+        name: 'AMINA NIZAM',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/AMINA-NIZAM.jpg'
+    },
+    {
+        id: '1Y-13',
+        name: 'ANANTHAN NARAYANAN SR',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/ANANTHAN-NARAYANAN-SR.jpg'
+    },
+    {
+        id: '1Y-14',
+        name: 'ANFIYA NN',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/ANFIYA-NN.jpg'
+    },
+    {
+        id: '1Y-15',
+        name: 'ANJANA AJITH',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/ANJANA-AJITH.jpg'
+    },
+    {
+        id: '1Y-16',
+        name: 'ANSHA SHAM',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/ANSHA-SHAM.jpg'
+    },
+    {
+        id: '1Y-17',
+        name: 'ANZIL SALIM',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/ANZIL-SALIM.jpg'
+    },
+    {
+        id: '1Y-18',
+        name: 'ANZAR A',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/ANZAR-A.jpg'
+    },
+    {
+        id: '1Y-19',
+        name: 'APSARA AJ',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/APSARA-AJ.jpg'
+    },
+    {
+        id: '1Y-20',
+        name: 'ARADHYA SJ',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/ARADHYA-SJ.jpg'
+    },
+    {
+        id: '1Y-21',
+        name: 'ARPPITHA BS',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/ARPPITHA-BS.jpg'
+    },
+    {
+        id: '1Y-22',
+        name: 'ARUN M',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/ARUN-M.jpg'
+    },
+    {
+        id: '1Y-23',
+        name: 'ARYAJITH A',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/ARYAJITH-A.jpg'
+    },
+    {
+        id: '1Y-24',
+        name: 'ASHIK S',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/ASHIK-S.jpg'
+    },
+    {
+        id: '1Y-25',
+        name: 'DAYA DEEPAN',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/DAYA-DEEPAN.jpg'
+    },
+    {
+        id: '1Y-26',
+        name: 'DEVANANDHA SS',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/DEVANANDHA-SS.jpg'
+    },
+    {
+        id: '1Y-27',
+        name: 'DIYA DEEPAN',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/DIYA-DEEPAN.jpg'
+    },
+    {
+        id: '1Y-28',
+        name: 'FARHANA F',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/FARHANA-F.jpg'
+    },
+    {
+        id: '1Y-29',
+        name: 'GANGA-LAKSHMI',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/GANGA-LAKSHMI.jpg'
+    },
+    {
+        id: '1Y-30',
+        name: 'GOPIKA G',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/GOPIKA-G.jpg'
+    },
+    {
+        id: '1Y-31',
+        name: 'HAJIRA R',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/HAJIRA-R.jpg'
+    },
+    {
+        id: '1Y-32',
+        name: 'HARINANDAN R',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/HARINANDAN-R.jpg'
+    },
+    {
+        id: '1Y-33',
+        name: 'IHSAN SAJEER',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/IHSAN-SAJEER.jpg'
+    },
+    {
+        id: '1Y-34',
+        name: 'INJAS AHAMMED K H',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/INJAS-AHAMMED-KH.jpg'
+    },
+    {
+        id: '1Y-35',
+        name: 'MEENAKSHI BG',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/MEENAKSHI-BG.jpg'
+    },
+    {
+        id: '1Y-36',
+        name: 'MOULANA MUHAMMED M',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/MOULANA-MUHAMMED-M.jpg'
+    },
+    {
+        id: '1Y-37',
+        name: 'MUHAMMED ALIF A',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/MUHAMMED-ALIF-A.jpg'
+    },
+    {
+        id: '1Y-38',
+        name: 'MUHAMMED IRFAN A',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/MUHAMMED-IRFAN-A.jpg'
+    },
+    {
+        id: '1Y-39',
+        name: 'MUHAMMED IRFAN F',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/MUHAMMED-IRFAN-F.jpg'
+    },
+    {
+        id: '1Y-40',
+        name: 'MUHAMMAD SHA SIRAJ',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/MUHAMMAD-SHA-SIRAJ.jpg'
+    },
+    {
+        id: '1Y-41',
+        name: 'RHUTHUL KRISHNA SR',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/RHUTHUL-KRISHNA-SR.jpg'
+    },
+    {
+        id: '1Y-42',
+        name: 'SAFNA N',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/SAFNA-N.jpg'
+    },
+    {
+        id: '1Y-43',
+        name: 'SAHAL A S',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/SAHAL-AS.jpg'
+    },
+    {
+        id: '1Y-44',
+        name: 'SHAFNA FATHIMA',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/SHAFNA-FATHIMA.jpg'
+    },
+    {
+        id: '1Y-45',
+        name: 'SHAHANA NR',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/SHAHANA-NR.jpg'
+    },
+    {
+        id: '1Y-46',
+        name: 'SOORAJ S',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/SOORAJ-S.jpg'
+    },
+    {
+        id: '1Y-47',
+        name: 'SREEHARI RS',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/SREEHARI-RS.jpg'
+    },
+    {
+        id: '1Y-48',
+        name: 'SREELAKSHMI AS',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/SREELAKSHMI-AS.jpg'
+    },
+    {
+        id: '1Y-49',
+        name: 'SYAM SANTHOSH',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/SYAM-SANTHOSH.jpg'
+    },
+    {
+        id: '1Y-50',
+        name: 'THANZEELA S',
+        class: '11-A', // Placeholder class
+        photo: 'images/volunteers/2025-27/THANZEELA-S.jpg'
+    }
+];
+
+// ---------------------------
+// Leadership & Social links
+// ---------------------------
+const leadership = {
+  programOfficer: { name: 'Mr. Priji Gopinath', photo: 'images/lead' },
+  principal: { name: 'Mrs. Beena V S', photo: 'images/lead' },
+  md: { name: 'Mr. Pachayil Sandeep', photo: 'images/lead' }
+};
+
+const socialLinks = {
+  phone1: '+91 94472 48993',
+  phone2: '+91 79070 85905',
+  instagram: 'https://instagram.com/snhss__nss/',
+  youtube: 'https://youtube.com/@snhsschithara?si=BaZsRDAO78gC4NCi',
+  email: 'nss.unit256@school.edu',
+  whatsapp: 'https://wa.me/+919447248993'
+};
+
+// ---------------------------
+// i18n (same as before, unchanged)
+// ---------------------------
+const i18n = {
+  en: {
+    'nav.home': 'Home',
+    'nav.about': 'About',
+    'nav.images': 'Images',
+    'nav.videos': 'Videos',
+    'history.title': 'History of the National Service Scheme',
+    'history.text': 'The National Service Scheme (NSS) was launched in 1969 with the primary objective of developing students’ personality through community service. NSS aims to foster social responsibility, leadership skills and civic consciousness among youth by engaging them in structured community activities.',
+    'history.cta': 'Learn more about our unit',
+    'latest.photos': 'Latest Photos',
+    'latest.videos': 'Latest Videos',
+    'callout.title': 'Join Us / Contact',
+    'callout.text': 'Unit 256 at Sree Narayana HSS Chithara is active year-round. Volunteers meet for regular activities and special community projects. Use the About page to find contacts and social links.',
+    'about.leadershipTitle': 'Leadership',
+    'about.programOfficer.title': 'Program Officer (NSS)',
+    'about.principal.title': 'Principal',
+    'about.md.title': 'Managing Director',
+    'about.contact.title': 'Contact & Social',
+    'about.contact.phone': 'Phone',
+    'about.contact.email': 'Email',
+    'about.secondYear.title': '2nd Year NSS Volunteers',
+    'about.secondYear.desc': '50 students. Each card shows photo, name and class. (Data is placeholder for demonstration.)',
+    'about.firstYear.title': '1st Year NSS Volunteers',
+    'about.firstYear.desc': '50 students. Each card shows photo, name and class. (Data is placeholder for demonstration.)',
+    'images.title': 'Gallery',
+    'images.desc': 'A collection of photos from our events and activities. Click to view larger.',
+    'images.videosTab': 'Videos',
+    'images.videosDesc': 'Embedded videos of our activities. Click play to watch.',
+    'videos.title': 'All Videos',
+    'videos.desc': 'Watch recordings of events, awareness programs, and community activities.'
+  },
+  ml: {
+    'nav.home': 'ഹോം',
+    'nav.about': 'ഞങ്ങളെക്കുറിച്ച്',
+    'nav.images': 'ഫോട്ടോകൾ',
+    'nav.videos': 'വീഡിയോസ്',
+    'history.title': 'നാഷണൽ സർവീസ് സ്കീമിന്റെ ചരിത്രം',
+    'history.text': 'നാഷണൽ സർവീസ് സ്കീം (NSS) 1969-ൽ ആരംഭിക്കുകയും കമ്മ്യൂണിറ്റി സേവനത്തിലൂടെ വിദ്യാർത്ഥികളുടെ വ്യക്തിത്വത്തെ വളർത്തുക എന്ന ലക്ഷ്യത്തോടെ പ്രവർത്തിക്കുകയും ചെയ്യുന്നു. NSS യുവജനങ്ങളിൽ സാമൂഹിക ഉത്തരവാദിത്തം, നേതൃ കഴിവുകൾ, പൗരബോധം എന്നിവ വളർത്തുന്നതിനായി വിവിധ പ്രവർത്തനങ്ങളിലൂടെ അവരെ പങ്കെടുപ്പിക്കുന്നു.',
+    'history.cta': 'ഞങ്ങളേക്കുറിച്ച് കൂടുതൽ അറിയൂ',
+    'latest.photos': 'പുതിയ അഞ്ച് ഫോട്ടോകൾ',
+    'latest.videos': 'പുതിയ അഞ്ച് വീഡിയോകൾ',
+    'callout.title': 'ഞങ്ങളോട് ചേർതടുക്കുക / ബന്ധപ്പെടുക',
+    'callout.text': 'ശ്രീ നാരായണ ഹൈയർ സെക്കൻഡറി സ്കൂൾ ചിതറയിലെ യൂണിറ്റ് 256 വർഷം മുഴുവൻ സജീവമാണ്. വോളണ്ടിയർമാർ സ്ഥിരമായി പരിപാടികളിലും സമൂഹ പരിപാടികളിലും പങ്കെടുക്കുന്നു. വിവരങ്ങൾക്കായി About പേജ് കാണുക.',
+    'about.leadershipTitle': 'മേധാവിമാർ',
+    'about.programOfficer.title': 'പ്രോഗ്രാം ഓഫീസർ (NSS)',
+    'about.principal.title': 'പ്രിൻസിപ്പൽ',
+    'about.md.title': 'മെനേജിംഗ് ഡയറക്ടർ',
+    'about.contact.title': 'ബന്ധപ്പെടാം & സോഷ്യൽ',
+    'about.contact.phone': 'ഫോൺ',
+    'about.contact.email': 'ഇമെയിൽ',
+    'about.secondYear.title': '2-ആം വർഷം NSS വോളണ്ടിയേഴ്സ്',
+    'about.secondYear.desc': '50 വിദ്യാർത്ഥികൾ. ഓരോ കാർഡിലും ഫോട്ടോ, പേര്, ക്ലാസ് കാണിക്കും.',
+    'about.firstYear.title': '1-ആം വർഷം NSS വോളണ്ടിയേഴ്സ്',
+    'about.firstYear.desc': '50 വിദ്യാർത്ഥികൾ. ഓരോ കാർഡിലും ഫോട്ടോ, പേര്, ക്ലാസ് കാണിക്കും.',
+    'images.title': 'ഗ്യാലറി',
+    'images.desc': 'ഞങ്ങളുടെ പരിപാടികളിലെ ഫോട്ടോകളുടെ ശേഖരം. വലിയതായ ദൃശ്യം കാണുവാൻ ക്ലിക്ക് ചെയ്യൂ.',
+    'images.videosTab': 'വീഡിയോസ്',
+    'images.videosDesc': 'വീഡിയോസ് ഇവിടെ ഉൾപ്പെടുത്തിയിരിക്കുന്നു. പ്ലേ ചെയ്യാൻ ക്ലിക്ക് ചെയ്യൂ.',
+    'videos.title': 'എല്ലാ വീഡിയോകളും',
+    'videos.desc': 'ഈവന്റുകൾ, അവബോധ പരിപാടികൾ, സമൂഹ പ്രവർത്തനങ്ങളുടെ റെക്കോർഡിംഗുകൾ കാണുക.'
+  }
+};
+
+// ---------------------------
+// Helpers
+// ---------------------------
+function $(sel) { return document.querySelector(sel); }
+function $all(sel) { return Array.from(document.querySelectorAll(sel)); }
+
+function formatDate(d){
+  if(!d) return '';
+  const dt = new Date(d);
+  return dt.toLocaleDateString();
+}
+
+function latest(items, n=5) {
+  return (items || []).slice().sort((a,b)=> new Date(b.date) - new Date(a.date)).slice(0,n);
+}
+
+function escapeHtml(s){
+  if(!s) return '';
+  return s.replace(/[&<>"']/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]; });
+}
+
+function isLocalFileProtocol() {
+  return location.protocol === 'file:';
+}
+
+// ---------------------------
+// YouTube fetcher & caching
+// ---------------------------
+
+async function fetchYouTubeChannelVideos(apiKey, channelId, maxResults = 8) {
+  if(!apiKey || !channelId) return null;
+
+  const cacheKey = `yt_videos_${channelId}`;
+  try {
+    // Check cache
+    const rawCache = localStorage.getItem(cacheKey);
+    if (rawCache) {
+      const cached = JSON.parse(rawCache);
+      if (cached && (Date.now() - cached.fetchedAt) < YT_CACHE_TTL) {
+        // console.log('Using cached YouTube videos');
+        return cached.items;
+      }
+    }
+  } catch (e) {
+    // ignore JSON parse errors
+    console.warn('YT cache read error', e);
+  }
+
+  // Use search.list to get most recent videos by channel
+  const url = `https://www.googleapis.com/youtube/v3/search?key=${encodeURIComponent(apiKey)}&channelId=${encodeURIComponent(channelId)}&part=snippet,id&order=date&maxResults=${Math.min(maxResults,50)}&type=video`;
+  try {
+    const resp = await fetch(url);
+    if (!resp.ok) {
+      const txt = await resp.text();
+      console.warn('YouTube API responded with non-OK:', resp.status, txt);
+      return null;
+    }
+    const data = await resp.json();
+    const items = (data.items || []).map(it => {
+      const vid = it.id && (it.id.videoId || it.id);
+      const sn = it.snippet || {};
+      return {
+        type: 'youtube',
+        id: vid,
+        title: sn.title || 'YouTube Video',
+        date: sn.publishedAt || ''
+      };
+    }).filter(x => x.id);
+
+    // store in cache
+    try {
+      localStorage.setItem(cacheKey, JSON.stringify({ fetchedAt: Date.now(), items }));
+    } catch (e) {
+      console.warn('YT cache write error', e);
+    }
+    return items;
+  } catch (err) {
+    console.error('Error fetching YouTube videos', err);
+    return null;
+  }
+}
+
+// ---------------------------
+// Video normalizers & creators (reuse earlier functions)
+// ---------------------------
+
+function normalizeYouTubeId(raw) {
+  if(!raw) return '';
+  let s = String(raw).trim();
+  try {
+    if (s.includes('youtu')) {
+      if (!s.startsWith('http')) s = 'https://' + s;
+      const u = new URL(s);
+      if (u.hostname && u.hostname.includes('youtu.be')) {
+        return u.pathname.replace(/^\//, '').split('?')[0];
+      }
+      if (u.searchParams && u.searchParams.get('v')) {
+        return u.searchParams.get('v').split('?')[0];
+      }
+      const parts = u.pathname.split('/');
+      const embedIndex = parts.indexOf('embed');
+      if (embedIndex !== -1 && parts[embedIndex+1]) return parts[embedIndex+1];
+    }
+    if (s.includes('?')) s = s.split('?')[0];
+    if (s.includes('&')) s = s.split('&')[0];
+    if (s.includes('/')) s = s.split('/').pop();
+    return s;
+  } catch (err) {
+    if (s.includes('?')) s = s.split('?')[0];
+    if (s.includes('&')) s = s.split('&')[0];
+    if (s.includes('/')) s = s.split('/').pop();
+    return s;
+  }
+}
+
+function normalizeVideoEntry(v) {
+  const copy = Object.assign({}, v);
+  if (!copy.type) {
+    copy.type = 'youtube';
+  }
+  if (copy.type === 'youtube') {
+    copy.id = normalizeYouTubeId(copy.id || copy.src || copy.url);
+  }
+  return copy;
+}
+
+function createVideoCard(rawItem) {
+  const v = normalizeVideoEntry(rawItem);
+  const card = document.createElement('div');
+  card.className = 'video-card';
+  const title = escapeHtml(v.title || 'Untitled');
+  const dateStr = v.date ? formatDate(v.date) : '';
+  const canEmbedIframes = !isLocalFileProtocol() && (location.protocol === 'http:' || location.protocol === 'https:');
+
+  if (v.type === 'youtube') {
+    const youtubeUrl = `https://www.youtube.com/watch?v=${v.id}`;
+    const thumb = `https://img.youtube.com/vi/${v.id}/hqdefault.jpg`;
+
+    if (v.id && canEmbedIframes) {
+      const params = `?rel=0&modestbranding=1&playsinline=1&origin=${encodeURIComponent(location.origin)}`;
+      const src = `https://www.youtube.com/embed/${v.id}${params}`;
+      card.innerHTML = `
+        <iframe src="${src}" title="${title}" frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <div style="padding:8px;">
+          <strong>${title}</strong>
+          <div class="muted" style="font-size:0.85rem">${dateStr}</div>
+        </div>
+      `;
+    } else {
+      card.innerHTML = `
+        <a href="${youtubeUrl}" target="_blank" rel="noopener" style="display:block;border-radius:8px;overflow:hidden;">
+          <img src="${thumb}" alt="${title}" style="width:100%;height:150px;object-fit:cover;display:block;" loading="lazy" />
+        </a>
+        <div style="padding:8px;">
+          <a href="${youtubeUrl}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;"><strong>${title}</strong></a>
+          <div class="muted" style="font-size:0.85rem">${dateStr}</div>
+        </div>
+      `;
+    }
+  } else if (v.type === 'vimeo') {
+    const vimeoUrl = `https://vimeo.com/${v.id}`;
+    const thumb = v.poster || '';
+    if (canEmbedIframes && v.id) {
+      const src = `https://player.vimeo.com/video/${v.id}`;
+      card.innerHTML = `
+        <iframe src="${src}" title="${title}" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+        <div style="padding:8px;">
+          <strong>${title}</strong>
+          <div class="muted" style="font-size:0.85rem">${dateStr}</div>
+        </div>
+      `;
+    } else {
+      card.innerHTML = `
+        <a href="${vimeoUrl}" target="_blank" rel="noopener" style="display:block;border-radius:8px;overflow:hidden;">
+          ${ thumb ? `<img src="${thumb}" alt="${title}" style="width:100%;height:150px;object-fit:cover;display:block;" loading="lazy" />` : `<div style="height:150px;background:#111;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff">Open on Vimeo</div>` }
+        </a>
+        <div style="padding:8px;">
+          <a href="${vimeoUrl}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;"><strong>${title}</strong></a>
+          <div class="muted" style="font-size:0.85rem">${dateStr}</div>
+        </div>
+      `;
+    }
+  } else if (v.type === 'local') {
+    const src = escapeHtml(v.src || '');
+    const posterAttr = v.poster ? ` poster="${escapeHtml(v.poster)}"` : '';
+    card.innerHTML = `
+      <div style="border-radius:8px;overflow:hidden;background:#000;">
+        <video controls preload="metadata" style="width:100%;height:150px;object-fit:cover;display:block;"${posterAttr}>
+          <source src="${src}" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      <div style="padding:8px;">
+        <strong>${title}</strong>
+        <div class="muted" style="font-size:0.85rem">${dateStr}</div>
+      </div>
+    `;
+  } else {
+    const href = v.url || '#';
+    card.innerHTML = `
+      <div style="padding:12px;">
+        <a href="${escapeHtml(href)}" target="_blank" rel="noopener"><strong>${title}</strong></a>
+        <div class="muted" style="font-size:0.85rem">${dateStr}</div>
+      </div>
+    `;
+  }
+  return card;
+}
+
+// ---------------------------
+// Rendering functions (same as previously)
+// ---------------------------
+function renderLatestPhotos() {
+  const target = $('#latest-photos');
+  if(!target) return;
+  target.innerHTML = '';
+  const latestPhotos = latest(images,5);
+  latestPhotos.forEach(img => {
+    const a = document.createElement('a');
+    a.href = img.src;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.className = 'photo-item';
+    a.innerHTML = `<img src="${img.src}" alt="${escapeHtml(img.title)}" loading="lazy" />`;
+    target.appendChild(a);
+  });
+}
+
+function renderLatestVideos() {
+  const target = $('#latest-videos');
+  if (!target) return;
+  target.innerHTML = '';
+  const latestV = latest(videos, 5);
+  latestV.forEach(raw => {
+    const card = createVideoCard(raw);
+    target.appendChild(card);
+  });
+}
+
+function renderGalleryPage() {
+  const gal = $('#images-gallery');
+  if (gal) {
+    gal.innerHTML = '';
+    images.forEach(img => {
+      const d = document.createElement('div');
+      d.className = 'photo-card';
+      d.innerHTML = `<img src="${img.src}" alt="${escapeHtml(img.title)}" loading="lazy" />`;
+      d.addEventListener('click', () => window.open(img.src, '_blank'));
+      gal.appendChild(d);
+    });
+  }
+  const vidTarget = $('#images-videos');
+  if (vidTarget) {
+    vidTarget.innerHTML = '';
+    videos.forEach(v => {
+      const c = createVideoCard(v);
+      vidTarget.appendChild(c);
+    });
+  }
+}
+
+function renderVideosPage() {
+  const list = $('#videos-list');
+  if (!list) return;
+  list.innerHTML = '';
+  videos.forEach(v => {
+    const c = createVideoCard(v);
+    list.appendChild(c);
+  });
+}
+
+// ---------------------------
+// Volunteers, leadership, social-render (unchanged)
+// ---------------------------
+function renderVolunteers() {
+  const sGrid = $('#second-year-grid');
+  const fGrid = $('#first-year-grid');
+  if(sGrid){
+    sGrid.innerHTML = '';
+    (typeof secondYear !== 'undefined' ? secondYear : []).forEach(s=>{
+      const el = document.createElement('div');
+      el.className = 'vol-card';
+      el.innerHTML = `<img src="${s.photo}" alt="${escapeHtml(s.name)}" loading="lazy" /><h4>${escapeHtml(s.name)}</h4><p>${escapeHtml(s.class)}</p>`;
+      sGrid.appendChild(el);
+    });
+  }
+  if(fGrid){
+    fGrid.innerHTML = '';
+    (typeof firstYear !== 'undefined' ? firstYear : []).forEach(s=>{
+      const el = document.createElement('div');
+      el.className = 'vol-card';
+      el.innerHTML = `<img src="${s.photo}" alt="${escapeHtml(s.name)}" loading="lazy" /><h4>${escapeHtml(s.name)}</h4><p>${escapeHtml(s.class)}</p>`;
+      fGrid.appendChild(el);
+    });
+  }
+}
+
+function renderLeadership() {
+  // if you want dynamic injection of leadership, implement here
+}
+
+function renderSocialHome() {
+  const container = $('#social-home');
+  if(!container) return;
+  container.innerHTML = `
+    <a class="cta" href="tel:${socialLinks.phone1}"><i class="fa fa-phone" style="margin-right:8px"></i>${socialLinks.phone1}</a>
+    <a class="cta" href="tel:${socialLinks.phone2}"><i class="fa fa-phone" style="margin-right:8px"></i>${socialLinks.phone2}</a>
+    <a class="cta" href="${socialLinks.instagram}" target="_blank" rel="noopener"><i class="fab fa-instagram" style="margin-right:8px"></i>Instagram</a>
+    <a class="cta" href="${socialLinks.youtube}" target="_blank" rel="noopener"><i class="fab fa-youtube" style="margin-right:8px"></i>YouTube</a>
+    <a class="cta" href="mailto:${socialLinks.email}"><i class="fa fa-envelope" style="margin-right:8px"></i>Email</a>
+    <a class="cta" href="${socialLinks.whatsapp}" target="_blank" rel="noopener"><i class="fa fa-whatsapp" style="margin-right:8px"></i> WhatsApp</a>
+  `;
+}
+
+// ---------------------------
+// i18n
+// ---------------------------
+function applyTranslations(lang) {
+  document.querySelectorAll('[data-i18n]').forEach(node=>{
+    const key = node.getAttribute('data-i18n');
+    if(i18n[lang] && i18n[lang][key]) {
+      node.textContent = i18n[lang][key];
+    }
+  });
+  document.body.setAttribute('data-lang', lang);
+  if(lang === 'ml'){
+    document.body.classList.add('lang-ml');
+    const brandTitle = document.getElementById('site-title');
+    if(brandTitle) brandTitle.textContent = 'നാഷണൽ സർവീസ് സ്കീം';
+    const brandSub = document.getElementById('site-sub');
+    if(brandSub) brandSub.textContent = 'യൂണിറ്റ് 256 — ശ്രീ നാരായണ ഹൈയർ സെക്കൻഡറി സ്‌കൂൾ ചിതറ';
+  } else {
+    document.body.classList.remove('lang-ml');
+    const brandTitle = document.getElementById('site-title');
+    if(brandTitle) brandTitle.textContent = 'National Service Scheme';
+    const brandSub = document.getElementById('site-sub');
+    if(brandSub) brandSub.textContent = 'Unit 256 — Sree Narayana Higher Secondary School Chithara';
+  }
+  document.querySelectorAll('.lang-btn').forEach(b=>{
+    if(b.id === `lang-${lang}`) {
+      b.setAttribute('aria-pressed','true');
+    } else {
+      b.setAttribute('aria-pressed','false');
+    }
+  });
+}
+
+// ---------------------------
+// Initialization (async so we can await YouTube fetch)
+// ---------------------------
+async function init() {
+  // If API key and channel ID are provided, try to fetch latest videos
+  if (YT_API_KEY && YT_CHANNEL_ID) {
+    try {
+      const fetched = await fetchYouTubeChannelVideos(YT_API_KEY, YT_CHANNEL_ID, YT_MAX_RESULTS);
+      if (fetched && fetched.length) {
+        // replace videos list with fetched videos (keeps them as youtube type objects)
+        videos = fetched;
+      }
+    } catch (err) {
+      console.warn('Failed to fetch YouTube videos:', err);
+    }
+  }
+
+  // render components
+  renderLatestPhotos();
+  renderLatestVideos();
+  renderGalleryPage();
+  renderVideosPage();
+  renderVolunteers();
+  renderLeadership();
+  renderSocialHome();
+
+  // set years dynamically
+  $all('#year,#year-2,#year-3,#year-4').forEach(el => el && (el.textContent = (new Date()).getFullYear()));
+
+  // language buttons
+  const enBtn = document.getElementById('lang-en');
+  const mlBtn = document.getElementById('lang-ml');
+
+  const storedLang = localStorage.getItem('nss_lang') || 'en';
+  applyTranslations(storedLang);
+
+  if(enBtn) enBtn.addEventListener('click', ()=>{
+    localStorage.setItem('nss_lang','en');
+    applyTranslations('en');
+    document.body.style.fontFamily = '';
+  });
+  if(mlBtn) mlBtn.addEventListener('click', ()=>{
+    localStorage.setItem('nss_lang','ml');
+    applyTranslations('ml');
+  });
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}

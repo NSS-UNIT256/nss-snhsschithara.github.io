@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>National Service Scheme - Unit 256 | Sree Narayana HSS Chithara</title>
+  <link rel="shortcut icon" href="logo.png" type="logo.png">
+
+  <!-- Google Font: Manjari for Malayalam -->
+  <link href="https://fonts.googleapis.com/css2?family=Manjari:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-lang="en">
+  <header class="site-header">
+    <div class="container header-grid">
+      <div class="brand" id="brand">
+        <img src="logo.png" alt="NSS Logo" class="logo" />
+        <div>
+          <h1 id="site-title">National Service Scheme</h1>
+          <p id="site-sub"> Unit 256 — Sree Narayana Higher Secondary School Chithara</p>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a href="index.html" class="active" data-i18n="nav.home">Home</a>
+        <a href="about.html" data-i18n="nav.about">About</a>
+        <a href="images.html" data-i18n="nav.images">Images</a>
+        <a href="videos.html" data-i18n="nav.videos">Videos</a>
+      </nav>
+
+      <div class="top-actions">
+        <div class="lang-switch">
+          <button id="lang-en" class="lang-btn" aria-pressed="true">EN</button>
+          <button id="lang-ml" class="lang-btn">മലയാളം</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero card">
+      <div class="hero-content">
+        <h2 id="history-heading" data-i18n="history.title">History of the National Service Scheme</h2>
+        <p id="history-text" data-i18n="history.text">
+          The National Service Scheme (NSS) was launched in 1969 with the primary objective of developing students’ personality through community service. NSS aims to foster social responsibility, leadership skills and civic consciousness among youth by engaging them in structured community activities.
+        </p>
+        <a class="cta" href="about.html" data-i18n="history.cta">Learn more about our unit</a>
+      </div>
+      <div class="hero-media">
+        <img src="logo.png" alt="NSS activity image" />
+      </div>
+    </section>
+
+    <section class="latest-section">
+      <h3 data-i18n="latest.photos">Latest Photos</h3>
+      <div id="latest-photos" class="gallery-grid">
+        <!-- JS injects latest 5 photos -->
+      </div>
+    </section>
+
+    <section class="latest-section">
+      <h3 data-i18n="latest.videos">Latest Videos</h3>
+      <div id="latest-videos" class="video-grid">
+        <!-- JS injects latest 5 videos -->
+      </div>
+    </section>
+
+    <section class="callout card">
+      <h3 data-i18n="callout.title">Join Us / Contact</h3>
+      <p data-i18n="callout.text">
+        Unit 256 at Sree Narayana HSS Chithara is active year-round. Volunteers meet for regular activities and special community projects. Use the About page to find contacts and social links.
+      </p>
+      <div class="social-row" id="social-home">
+        <!-- Social buttons injected by JS for translation compliance -->
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <span>&copy; <span id="year"></span> NSS Unit 256 — Sree Narayana HSS Chithara</span>
+      <nav class="footer-nav">
+        <a href="index.html" data-i18n="nav.home">Home</a>
+        <a href="about.html" data-i18n="nav.about">About</a>
+        <a href="images.html" data-i18n="nav.images">Images</a>
+        <a href="videos.html" data-i18n="nav.videos">Videos</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

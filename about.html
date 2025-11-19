@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>About — NSS Unit 256 | Sree Narayana HSS Chithara</title>
+  <link rel="shortcut icon" href="logo.png" type="logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Manjari:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-lang="en">
+  <header class="site-header">
+    <div class="container header-grid">
+      <div class="brand">
+        <img src="logo.png" alt="NSS Logo" class="logo" />
+        <div>
+          <h1 id="site-title">National Service Scheme</h1>
+          <p id="site-sub"> Unit 256 — Sree Narayana Higher Secondary School Chithara</p>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a href="index.html" data-i18n="nav.home">Home</a>
+        <a href="about.html" class="active" data-i18n="nav.about">About</a>
+        <a href="images.html" data-i18n="nav.images">Images</a>
+        <a href="videos.html" data-i18n="nav.videos">Videos</a>
+      </nav>
+
+      <div class="top-actions">
+        <div class="lang-switch">
+          <button id="lang-en" class="lang-btn" aria-pressed="true">EN</button>
+          <button id="lang-ml" class="lang-btn">മലയാളം</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container about-page">
+    <section class="card leadership">
+      <h2 data-i18n="about.leadershipTitle">Leadership</h2>
+      <div class="lead-grid">
+        <div class="person-card-m">
+          <img src="images/lead/Vellapally-Natesan.jpeg" alt="Manager" />
+          <h4 data-i18n="about.manager.title">Manager</h4>
+          <p id="manager-name"><b>Mr. Vellapally Natesan</b></p>
+        </div>
+        <div class="person-card">
+          <img src="" alt="Principal" />
+          <h4 data-i18n="about.principal.title">Principal</h4>
+          <p id="principal-name">Mrs. Beena V S</p>
+        </div>
+        <div class="person-card">
+          <img src="" alt="Program Officer" />
+          <h4 data-i18n="about.programOfficer.title">Program Officer (NSS)</h4>
+          <p id="po-name">Mr. Priji Gopinath</p>
+        </div>
+        <div class="person-card">
+          <img src="" alt="Managing Director" />
+          <h4 data-i18n="about.md.title">Managing Director</h4>
+          <p id="md-name">Mr. Pachayil Sandheep</p>
+        </div>
+      </div>
+
+      <div class="contact-block">
+        <h4 data-i18n="about.contact.title">Contact & Social</h4>
+        <div class="contact-items">
+          <div class="contact-item">
+            <i class="fa fa-phone"></i>
+            <div>
+              <div class="contact-label" data-i18n="about.contact.phone">Phone</div>
+              <div class="contact-value">+91 94472 48993</div>
+              <div class="contact-value">+91 79070 85905</div>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <i class="fa fa-envelope"></i>
+            <div>
+              <div class="contact-label" data-i18n="about.contact.email">Email</div>
+              <div class="contact-value"><a href="mailto:nationalserviceschemeunit256@gmail.com">nationalserviceschemeunit256@gmail.com</a></div>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <i class="fa-brands fa-instagram"></i>
+            <div>
+              <div class="contact-label">Instagram</div>
+              <div class="contact-value"><a href="https://instagram.com/snhss__nss/" target="_blank" rel="noopener">instagram.com/snhss_nss</a></div>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <i class="fa-brands fa-youtube"></i>
+            <div>
+              <div class="contact-label">YouTube</div>
+              <div class="contact-value"><a href="https://youtube.com/@snhsschithara?si=BaZsRDAO78gC4NCi" target="_blank" rel="noopener">youtube.com/snhsschithara</a></div>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <i class="fa-brands fa-whatsapp"></i>
+            <div>
+              <div class="contact-label">WhatsApp</div>
+              <div class="contact-value"><a href="https://wa.me/+919447248993" target="_blank" rel="noopener">+91 98765 43210</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card volunteers">
+      <h2 id="first-year-title" data-i18n="about.firstYear.title">1st Year NSS Volunteers</h2>
+      <p class="muted" data-i18n="about.firstYear.desc">50 students. Each card shows photo, name and class. (Data is placeholder for demonstration.)</p>
+      <div id="first-year-grid" class="vol-grid">
+        <!-- JS generates 50 student cards -->
+      </div>
+    </section>
+
+    <section class="card volunteers">
+      <h2 id="second-year-title" data-i18n="about.secondYear.title">2nd Year NSS Volunteers</h2>
+      <p class="muted" data-i18n="about.secondYear.desc">50 students. Each card shows photo, name and class. (Data is placeholder for demonstration.)</p>
+      <div id="second-year-grid" class="vol-grid">
+        <!-- JS generates 50 student cards -->
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <span>&copy; <span id="year-2"></span> NSS Unit 256 — Sree Narayana HSS Chithara</span>
+      <nav class="footer-nav">
+        <a href="index.html" data-i18n="nav.home">Home</a>
+        <a href="about.html" data-i18n="nav.about">About</a>
+        <a href="images.html" data-i18n="nav.images">Images</a>
+        <a href="videos.html" data-i18n="nav.videos">Videos</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
