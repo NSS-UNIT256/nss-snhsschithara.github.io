@@ -1,71 +1,40 @@
-// Main client script for NSS website (updated)
-// - Improved video support (YouTube/Vimeo/local) with fallback when embedding is blocked (file:// or owner disabled embedding)
-// - Sanitizes YouTube IDs/URLs so embedding doesn't break when an ID contains query params
-// - Preserves your volunteer data and translations
-// - Detects file:// and shows clickable thumbnails instead of iframes
-//
-// Replace your existing script.js with this file.
 
-
-// Configuration: FILL THESE
-// ---------------------------
 const YT_API_KEY = 'AIzaSyCmda7YFfugrv2oRsEwBuSpZoO5XGceGUk'; // <-- Put your YouTube Data API v3 key here (or leave empty to disable auto-fetch)
 const YT_CHANNEL_ID = 'UCNYUD1HguwfAJdn8d_gVZ_Q'; // <-- Put your channel's ID (starts with "UC...") here
-const YT_MAX_RESULTS = 12; // how many recent videos to fetch
+const YT_MAX_RESULTS = 16; // how many recent videos to fetch
 const YT_CACHE_TTL = 10 * 60 * 1000; // cache in ms (10 minutes)
 
 // ---------------------------
-// Data (images, videos placeholder)
+// images (placeholder)
 // ---------------------------
-
-// images (replace with your own)
-const images = Array.from({length: 20}).map((_, i) => {
+const images = Array.from({ length: 20 }).map((_, i) => {
   const id = i + 1;
   return {
     id,
     title: `NSS Event Photo ${id}`,
-    src: `logo.png${id}`,
+    // Placeholder service so the gallery doesn't show broken images.
+    // Replace with local paths like 'images/events/1.jpg' if you have them.
+    src: `https://picsum.photos/seed/nss-${id}/800/600`,
     date: new Date(Date.UTC(2025, 10, Math.max(1, 28 - i))).toISOString()
   };
 });
 
-// Videos: you provided some YouTube IDs. We support three types:
-// - YouTube: { type: 'youtube', id: 'VIDEO_ID' }  OR legacy { id: 'VIDEO_ID_OR_URL' }
-// - Vimeo:   { type: 'vimeo', id: 'VIMEO_ID' }
-// - Local:   { type: 'local', src: 'videos/name.mp4', poster: 'images/poster.jpg' }
-//
-// NOTE: If you paste a full YouTube share URL or include query params (e.g. '?si=...') the script will sanitize it.
-const videos = [
-  // legacy-style entries (no 'type') will be treated as YouTube automatically and sanitized
+// ---------------------------
+// Videos - allow reassignment (let) later from fetched results
+// ---------------------------
+let videos = [
   { id: 'YO535HHbZpg?si=qX4im20DACxvY_D-', title: 'The Cynosure of art and skills', date: '' },
   { id: 'kJQP7kiw5Fk', title: 'NSS Awareness Drive', date: '2025-10-20T12:00:00Z' },
   { id: '3JZ_D3ELwOQ', title: 'Community Service Highlights', date: '2025-10-25T12:00:00Z' },
   { id: '9bZkp7q19f0', title: 'Tree Planting Program', date: '2025-10-27T12:00:00Z' },
   { id: 'fJ9rUzIMcZQ', title: 'Health Camp', date: '2025-10-28T12:00:00Z' },
   { id: 'e-ORhEE9VVg', title: 'Workshop: Leadership', date: '2025-09-10T12:00:00Z' },
-  { id: 'uelHwf8o7_U', title: 'Clean-up Drive', date: '2025-09-20T12:00:00Z' },
-
-  // Example of explicitly typed entries:
-  // { type: 'vimeo', id: '76979871', title: 'Vimeo Sample', date: '2025-09-01T12:00:00Z' },
-  // { type: 'local', src: 'videos/health-camp.mp4', poster: 'images/posters/health-camp.jpg', title: 'Health Camp (Local)', date: '2025-10-28T12:00:00Z' }
+  { id: 'uelHwf8o7_U', title: 'Clean-up Drive', date: '2025-09-20T12:00:00Z' }
 ];
 
 // ---------------------------
-// Volunteers (your provided lists kept intact)
+// Volunteers (full arrays preserved from your original files)
 // ---------------------------
-
-// Helper to generate fallback volunteers if needed (not used for your explicit arrays)
-function makeVolunteers(prefix, yearLabel) {
-  return Array.from({length:50}).map((_, idx) => {
-    const num = String(idx+1).padStart(2, '0');
-    return {
-      id: `${prefix}-${num}`,
-      name: `${yearLabel} Volunteer ${num}`,
-      class: (Math.floor(Math.random()*2) === 0) ? `12-A` : `12-B`,
-      photo: `https://i.pravatar.cc/300?img=${(idx % 70) + 1}`
-    };
-  });
-}
 
 const secondYear = [
   {
@@ -381,294 +350,294 @@ const firstYear = [
     id: '1Y-02',
     name: 'AFSANA S SHAIJU',
     class: '+1-Biology Science B (Leader)',
-    photo: 'images/volunteers/2025-27/2.jpeg'
+    photo: 'images/volunteers/2025-27/2.JPEG'
   },
     {
         id: '1Y-03',
         name: 'ABINAS S',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/ABINAS-S.JPG'
     },
     {
         id: '1Y-04',
         name: 'ADHAL S',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/ADHAL-S.JPG'
     },
     {
         id: '1Y-05',
         name: 'ADITHYA BINU',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/ADITHYA-BINU.JPG'
     },
     {
         id: '1Y-06',
         name: 'ADITHYAN S',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/ADITHYAN-S.JPG'
     },
     {
         id: '1Y-07',
         name: 'AISWARYA RS',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/AISWARYA-RS.JPG'
     },
     {
         id: '1Y-08',
         name: 'AJMAL MUHAMMAD S',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/AJMAL-MUHAMMAD-S.JPG'
     },
     {
         id: '1Y-09',
         name: 'AL AMEEN S',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/AL-AMEEN-S.JPG'
     },
     {
         id: '1Y-10',
         name: 'AL FARIS ASHARAF',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/AL-FARIS-ASHARAF.JPG'
     },
     {
         id: '1Y-11',
         name: 'ALFIYA S',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/ALFIYA-S.JPG'
     },
     {
         id: '1Y-12',
         name: 'AMINA NIZAM',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/AMINA-NIZAM.JPG'
     },
     {
         id: '1Y-13',
         name: 'ANANTHAN NARAYANAN SR',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/ANANTHAN-NARAYANAN-SR.JPG'
     },
     {
         id: '1Y-14',
         name: 'ANFIYA NN',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/ANFIYA-NN.JPG'
     },
     {
         id: '1Y-15',
         name: 'ANJANA AJITH',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/ANJANA-AJITH.JPG'
     },
     {
         id: '1Y-16',
         name: 'ANSHA SHAM',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/ANSHA-SHAM.JPG'
     },
     {
         id: '1Y-17',
         name: 'ANZIL SALIM',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/ANZIL-SALIM.JPG'
     },
     {
         id: '1Y-18',
         name: 'ANZAR A',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/ANZAR-A.JPG'
     },
     {
         id: '1Y-19',
         name: 'APSARA AJ',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/APSARA-AJ.JPG'
     },
     {
         id: '1Y-20',
         name: 'ARADHYA SJ',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/ARADHYA-SJ.JPG'
     },
     {
         id: '1Y-21',
         name: 'ARPPITHA BS',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/ARPPITHA-BS.JPG'
     },
     {
         id: '1Y-22',
         name: 'ARUN M',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/ARUN-M.JPG'
     },
     {
         id: '1Y-23',
         name: 'ARYAJITH A',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/ARYAJITH-A.JPG'
     },
     {
         id: '1Y-24',
         name: 'ASHIK S',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/ASHIK-S.JPG'
     },
     {
         id: '1Y-25',
         name: 'DAYA DEEPAN',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/DAYA-DEEPAN.JPG'
     },
     {
         id: '1Y-26',
         name: 'DEVANANDHA SS',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/DEVANANDHA-SS.JPG'
     },
     {
         id: '1Y-27',
         name: 'DIYA DEEPAN',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/DIYA-DEEPAN.JPG'
     },
     {
         id: '1Y-28',
         name: 'FARHANA F',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/FARHANA-F.JPG'
     },
     {
         id: '1Y-29',
         name: 'GANGA-LAKSHMI',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/GANGA-LAKSHMI.JPG'
     },
     {
         id: '1Y-30',
         name: 'GOPIKA G',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/GOPIKA-G.JPG'
     },
     {
         id: '1Y-31',
         name: 'HAJIRA R',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/HAJIRA-R.JPG'
     },
     {
         id: '1Y-32',
         name: 'HARINANDAN R',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/HARINANDAN-R.JPG'
     },
     {
         id: '1Y-33',
         name: 'IHSAN SAJEER',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/IHSAN-SAJEER.JPG'
     },
     {
         id: '1Y-34',
         name: 'INJAS AHAMMED K H',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/INJAS-AHAMMED-KH.JPG'
     },
     {
         id: '1Y-35',
         name: 'MEENAKSHI BG',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/MEENAKSHI-BG.JPG'
     },
     {
         id: '1Y-36',
         name: 'MOULANA MUHAMMED M',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/MOULANA-MUHAMMED-M.JPG'
     },
     {
         id: '1Y-37',
         name: 'MUHAMMED ALIF A',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/MUHAMMED-ALIF-A.JPG'
     },
     {
         id: '1Y-38',
         name: 'MUHAMMED IRFAN A',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/MUHAMMED-IRFAN-A.JPG'
     },
     {
         id: '1Y-39',
         name: 'MUHAMMED IRFAN F',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/MUHAMMED-IRFAN-F.JPG'
     },
     {
         id: '1Y-40',
         name: 'MUHAMMAD SHA SIRAJ',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/MUHAMMAD-SHA-SIRAJ.JPG'
     },
     {
         id: '1Y-41',
         name: 'RHUTHUL KRISHNA SR',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/RHUTHUL-KRISHNA-SR.JPG'
     },
     {
         id: '1Y-42',
         name: 'SAFNA N',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/SAFNA-N.JPG'
     },
     {
         id: '1Y-43',
         name: 'SAHAL A S',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/SAHAL-AS.JPG'
     },
     {
         id: '1Y-44',
         name: 'SHAFNA FATHIMA',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/SHAFNA-FATHIMA.JPG'
     },
     {
         id: '1Y-45',
         name: 'SHAHANA NR',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/SHAHANA-NR.JPG'
     },
     {
         id: '1Y-46',
         name: 'SOORAJ S',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/SOORAJ-S.JPG'
     },
     {
         id: '1Y-47',
         name: 'SREEHARI RS',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/SREEHARI-RS.JPG'
     },
     {
         id: '1Y-48',
         name: 'SREELAKSHMI AS',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/SREELAKSHMI-AS.JPG'
     },
     {
         id: '1Y-49',
         name: 'SYAM SANTHOSH',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/SYAM-SANTHOSH.JPG'
     },
     {
         id: '1Y-50',
         name: 'THANZEELA S',
-        class: '11-A', // Placeholder class
+        class: '11-A',
         photo: 'images/volunteers/2025-27/THANZEELA-S.JPG'
     }
 ];
@@ -677,6 +646,7 @@ const firstYear = [
 // Leadership & Social links
 // ---------------------------
 const leadership = {
+  manager:{ name: 'Mr.Vellapally Natesan', photo:'images/lead/Vellapally-Natesan.jpeg'},
   programOfficer: { name: 'Mr. Priji Gopinath', photo: 'images/lead' },
   principal: { name: 'Mrs. Beena V S', photo: 'images/lead' },
   md: { name: 'Mr. Pachayil Sandeep', photo: 'images/lead' }
@@ -687,12 +657,12 @@ const socialLinks = {
   phone2: '+91 79070 85905',
   instagram: 'https://instagram.com/snhss__nss/',
   youtube: 'https://youtube.com/@snhsschithara?si=BaZsRDAO78gC4NCi',
-  email: 'nss.unit256@school.edu',
+  email: 'nationalserviceschemeunit256@gmail.com',
   whatsapp: 'https://wa.me/+919447248993'
 };
 
 // ---------------------------
-// i18n (same as before, unchanged)
+// i18n
 // ---------------------------
 const i18n = {
   en: {
@@ -708,9 +678,10 @@ const i18n = {
     'callout.title': 'Join Us / Contact',
     'callout.text': 'Unit 256 at Sree Narayana HSS Chithara is active year-round. Volunteers meet for regular activities and special community projects. Use the About page to find contacts and social links.',
     'about.leadershipTitle': 'Leadership',
+    'about.manager.title':'General Manager'
     'about.programOfficer.title': 'Program Officer (NSS)',
     'about.principal.title': 'Principal',
-    'about.md.title': 'Managing Director',
+    'about.md.title': 'SNDP Yogam Councillor',
     'about.contact.title': 'Contact & Social',
     'about.contact.phone': 'Phone',
     'about.contact.email': 'Email',
@@ -731,13 +702,14 @@ const i18n = {
     'nav.images': 'ഫോട്ടോകൾ',
     'nav.videos': 'വീഡിയോസ്',
     'history.title': 'നാഷണൽ സർവീസ് സ്കീമിന്റെ ചരിത്രം',
-    'history.text': 'നാഷണൽ സർവീസ് സ്കീം (NSS) 1969-ൽ ആരംഭിക്കുകയും കമ്മ്യൂണിറ്റി സേവനത്തിലൂടെ വിദ്യാർത്ഥികളുടെ വ്യക്തിത്വത്തെ വളർത്തുക എന്ന ലക്ഷ്യത്തോടെ പ്രവർത്തിക്കുകയും ചെയ്യുന്നു. NSS യുവജനങ്ങളിൽ സാമൂഹിക ഉത്തരവാദിത്തം, നേതൃ കഴിവുകൾ, പൗരബോധം എന്നിവ വളർത്തുന്നതിനായി വിവിധ പ്രവർത്തനങ്ങളിലൂടെ അവരെ പങ്കെടുപ്പിക്കുന്നു.',
+    'history.text': 'നാഷണൽ സർവീസ് സ്കീം (NSS) 1969-ൽ ആരംഭിക്കുകയും കമ്മ്യൂണിറ്റി സേവനത്തിലൂടെ വിദ്യാർത്ഥികളുടെ വ്യക്തിത്വത്തെ വളർത്തുക എന്ന ലക്ഷ്യത്തോടെ പ്രവർത്തിക്കുകയും ചെയ്യുന്നു. NSS യുവജനങ്ങളിൽ സാമൂഹിക ഉത്തരവാദിത്തം, നേതൃത്വ കഴിവുകൾ, പൗരബോധം എന്നിവ വളർത്തുന്നതിനായി വിവിധ പ്രവർത്തനങ്ങളിലൂടെ അവരെ സജ്ജരാക്കുന്നു.',
     'history.cta': 'ഞങ്ങളേക്കുറിച്ച് കൂടുതൽ അറിയൂ',
-    'latest.photos': 'പുതിയ അഞ്ച് ഫോട്ടോകൾ',
-    'latest.videos': 'പുതിയ അഞ്ച് വീഡിയോകൾ',
-    'callout.title': 'ഞങ്ങളോട് ചേർതടുക്കുക / ബന്ധപ്പെടുക',
-    'callout.text': 'ശ്രീ നാരായണ ഹൈയർ സെക്കൻഡറി സ്കൂൾ ചിതറയിലെ യൂണിറ്റ് 256 വർഷം മുഴുവൻ സജീവമാണ്. വോളണ്ടിയർമാർ സ്ഥിരമായി പരിപാടികളിലും സമൂഹ പരിപാടികളിലും പങ്കെടുക്കുന്നു. വിവരങ്ങൾക്കായി About പേജ് കാണുക.',
+    'latest.photos': 'പുതിയ ഫോടോകൾ',
+    'latest.videos': 'പുതിയ വീഡിയോകൾ',
+    'callout.title': 'ഞങ്ങളെ ബന്ധപ്പെടുക',
+    'callout.text': 'ശ്രീ നാരായണ ഹൈയർ സെക്കൻഡറി സ്കൂൾ ചിതറയിലെ യൂണിറ്റ് 256 വർഷം മുഴുവൻ സജീവമാണ്. വോളണ്ടിയർമാർ സ്ഥിരമായി പരിപാടികളിലും സമൂഹിക പ്രവർത്തനങ്ങളിലും പങ്കെടുക്കുന്നു. വിവരങ്ങൾക്കായി About പേജ് കാണുക.',
     'about.leadershipTitle': 'മേധാവിമാർ',
+    'about.manager.title':  'ജനറൽ മാനേജർ',
     'about.programOfficer.title': 'പ്രോഗ്രാം ഓഫീസർ (NSS)',
     'about.principal.title': 'പ്രിൻസിപ്പൽ',
     'about.md.title': 'മെനേജിംഗ് ഡയറക്ടർ',
@@ -753,7 +725,7 @@ const i18n = {
     'images.videosTab': 'വീഡിയോസ്',
     'images.videosDesc': 'വീഡിയോസ് ഇവിടെ ഉൾപ്പെടുത്തിയിരിക്കുന്നു. പ്ലേ ചെയ്യാൻ ക്ലിക്ക് ചെയ്യൂ.',
     'videos.title': 'എല്ലാ വീഡിയോകളും',
-    'videos.desc': 'ഈവന്റുകൾ, അവബോധ പരിപാടികൾ, സമൂഹ പ്രവർത്തനങ്ങളുടെ റെക്കോർഡിംഗുകൾ കാണുക.'
+    'videos.desc': 'ഈവന്റുകൾ, കമ്മ്യൂണിറ്റി പ്രവർത്തനങ്ങൾ, ബോധവൽക്കരണ പ്രവർത്തനങ്ങൾ എന്നിവയുടെ റെക്കോർഡിംഗുകൾ കാണുക.'
   }
 };
 
@@ -763,19 +735,19 @@ const i18n = {
 function $(sel) { return document.querySelector(sel); }
 function $all(sel) { return Array.from(document.querySelectorAll(sel)); }
 
-function formatDate(d){
-  if(!d) return '';
+function formatDate(d) {
+  if (!d) return '';
   const dt = new Date(d);
   return dt.toLocaleDateString();
 }
 
-function latest(items, n=5) {
-  return (items || []).slice().sort((a,b)=> new Date(b.date) - new Date(a.date)).slice(0,n);
+function latest(items, n = 5) {
+  return (items || []).slice().sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, n);
 }
 
-function escapeHtml(s){
-  if(!s) return '';
-  return s.replace(/[&<>"']/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]; });
+function escapeHtml(s) {
+  if (!s) return '';
+  return s.replace(/[&<>"']/g, function (m) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m]; });
 }
 
 function isLocalFileProtocol() {
@@ -783,30 +755,25 @@ function isLocalFileProtocol() {
 }
 
 // ---------------------------
-// YouTube fetcher & caching
+// YouTube fetcher & caching (integrated)
 // ---------------------------
-
 async function fetchYouTubeChannelVideos(apiKey, channelId, maxResults = 8) {
-  if(!apiKey || !channelId) return null;
+  if (!apiKey || !channelId) return null;
 
   const cacheKey = `yt_videos_${channelId}`;
   try {
-    // Check cache
     const rawCache = localStorage.getItem(cacheKey);
     if (rawCache) {
       const cached = JSON.parse(rawCache);
       if (cached && (Date.now() - cached.fetchedAt) < YT_CACHE_TTL) {
-        // console.log('Using cached YouTube videos');
         return cached.items;
       }
     }
   } catch (e) {
-    // ignore JSON parse errors
     console.warn('YT cache read error', e);
   }
 
-  // Use search.list to get most recent videos by channel
-  const url = `https://www.googleapis.com/youtube/v3/search?key=${encodeURIComponent(apiKey)}&channelId=${encodeURIComponent(channelId)}&part=snippet,id&order=date&maxResults=${Math.min(maxResults,50)}&type=video`;
+  const url = `https://www.googleapis.com/youtube/v3/search?key=${encodeURIComponent(apiKey)}&channelId=${encodeURIComponent(channelId)}&part=snippet,id&order=date&maxResults=${Math.min(maxResults, 50)}&type=video`;
   try {
     const resp = await fetch(url);
     if (!resp.ok) {
@@ -826,7 +793,6 @@ async function fetchYouTubeChannelVideos(apiKey, channelId, maxResults = 8) {
       };
     }).filter(x => x.id);
 
-    // store in cache
     try {
       localStorage.setItem(cacheKey, JSON.stringify({ fetchedAt: Date.now(), items }));
     } catch (e) {
@@ -840,11 +806,30 @@ async function fetchYouTubeChannelVideos(apiKey, channelId, maxResults = 8) {
 }
 
 // ---------------------------
-// Video normalizers & creators (reuse earlier functions)
+// Minimal external fetch helper (same idea as api.js but included here)
 // ---------------------------
+async function fetchYouTubeVideosMinimal(apiKey, channelId, maxResults = 10) {
+  if (!apiKey || !channelId) return null;
+  const apiURL = `https://www.googleapis.com/youtube/v3/search?key=${encodeURIComponent(apiKey)}&channelId=${encodeURIComponent(channelId)}&part=snippet,id&order=date&maxResults=${maxResults}&type=video`;
+  try {
+    const res = await fetch(apiURL);
+    if (!res.ok) {
+      console.warn('YouTube API non-OK', res.status);
+      return null;
+    }
+    const data = await res.json();
+    return data.items || [];
+  } catch (err) {
+    console.error('Error fetching YouTube videos (minimal):', err);
+    return null;
+  }
+}
 
+// ---------------------------
+// Video normalization & card creation
+// ---------------------------
 function normalizeYouTubeId(raw) {
-  if(!raw) return '';
+  if (!raw) return '';
   let s = String(raw).trim();
   try {
     if (s.includes('youtu')) {
@@ -858,7 +843,7 @@ function normalizeYouTubeId(raw) {
       }
       const parts = u.pathname.split('/');
       const embedIndex = parts.indexOf('embed');
-      if (embedIndex !== -1 && parts[embedIndex+1]) return parts[embedIndex+1];
+      if (embedIndex !== -1 && parts[embedIndex + 1]) return parts[embedIndex + 1];
     }
     if (s.includes('?')) s = s.split('?')[0];
     if (s.includes('&')) s = s.split('&')[0];
@@ -874,9 +859,7 @@ function normalizeYouTubeId(raw) {
 
 function normalizeVideoEntry(v) {
   const copy = Object.assign({}, v);
-  if (!copy.type) {
-    copy.type = 'youtube';
-  }
+  if (!copy.type) copy.type = 'youtube';
   if (copy.type === 'youtube') {
     copy.id = normalizeYouTubeId(copy.id || copy.src || copy.url);
   }
@@ -890,13 +873,14 @@ function createVideoCard(rawItem) {
   const title = escapeHtml(v.title || 'Untitled');
   const dateStr = v.date ? formatDate(v.date) : '';
   const canEmbedIframes = !isLocalFileProtocol() && (location.protocol === 'http:' || location.protocol === 'https:');
+  const originSafe = (location && location.origin) ? encodeURIComponent(location.origin) : '';
 
   if (v.type === 'youtube') {
     const youtubeUrl = `https://www.youtube.com/watch?v=${v.id}`;
     const thumb = `https://img.youtube.com/vi/${v.id}/hqdefault.jpg`;
 
     if (v.id && canEmbedIframes) {
-      const params = `?rel=0&modestbranding=1&playsinline=1&origin=${encodeURIComponent(location.origin)}`;
+      const params = `?rel=0&modestbranding=1&playsinline=1${originSafe ? `&origin=${originSafe}` : ''}`;
       const src = `https://www.youtube.com/embed/${v.id}${params}`;
       card.innerHTML = `
         <iframe src="${src}" title="${title}" frameborder="0"
@@ -968,13 +952,13 @@ function createVideoCard(rawItem) {
 }
 
 // ---------------------------
-// Rendering functions (same as previously)
+// Rendering functions
 // ---------------------------
 function renderLatestPhotos() {
   const target = $('#latest-photos');
-  if(!target) return;
+  if (!target) return;
   target.innerHTML = '';
-  const latestPhotos = latest(images,5);
+  const latestPhotos = latest(images, 5);
   latestPhotos.forEach(img => {
     const a = document.createElement('a');
     a.href = img.src;
@@ -1030,38 +1014,48 @@ function renderVideosPage() {
 }
 
 // ---------------------------
-// Volunteers, leadership, social-render (unchanged)
+// Volunteers, leadership, social-render
 // ---------------------------
 function renderVolunteers() {
   const sGrid = $('#second-year-grid');
   const fGrid = $('#first-year-grid');
-  if(sGrid){
-    sGrid.innerHTML = '';
-    (typeof secondYear !== 'undefined' ? secondYear : []).forEach(s=>{
-      const el = document.createElement('div');
-      el.className = 'vol-card';
-      el.innerHTML = `<img src="${s.photo}" alt="${escapeHtml(s.name)}" loading="lazy" /><h4>${escapeHtml(s.name)}</h4><p>${escapeHtml(s.class)}</p>`;
-      sGrid.appendChild(el);
-    });
+
+  function createVolCard(s) {
+    const el = document.createElement('div');
+    el.className = 'vol-card';
+    const imgSrc = s.photo || 'logo.png';
+    const sanitizedName = escapeHtml(s.name);
+    const sanitizedClass = escapeHtml(s.class);
+    el.innerHTML = `<img src="${imgSrc}" alt="${sanitizedName}" loading="lazy" /><h4>${sanitizedName}</h4><p>${sanitizedClass}</p>`;
+    const img = el.querySelector('img');
+    if (img) {
+      img.addEventListener('error', () => {
+        img.src = '/images/activities/';
+      });
+    }
+    return el;
   }
-  if(fGrid){
+
+  if (sGrid) {
+    sGrid.innerHTML = '';
+    const list = (typeof secondYear !== 'undefined' ? secondYear : []);
+    list.forEach(s => sGrid.appendChild(createVolCard(s)));
+  }
+  if (fGrid) {
     fGrid.innerHTML = '';
-    (typeof firstYear !== 'undefined' ? firstYear : []).forEach(s=>{
-      const el = document.createElement('div');
-      el.className = 'vol-card';
-      el.innerHTML = `<img src="${s.photo}" alt="${escapeHtml(s.name)}" loading="lazy" /><h4>${escapeHtml(s.name)}</h4><p>${escapeHtml(s.class)}</p>`;
-      fGrid.appendChild(el);
-    });
+    const list = (typeof firstYear !== 'undefined' ? firstYear : []);
+    list.forEach(s => fGrid.appendChild(createVolCard(s)));
   }
 }
 
 function renderLeadership() {
-  // if you want dynamic injection of leadership, implement here
+  // Placeholder: your HTML currently includes leadership markup.
+  // If you'd prefer dynamic injection, implement it here.
 }
 
 function renderSocialHome() {
   const container = $('#social-home');
-  if(!container) return;
+  if (!container) return;
   container.innerHTML = `
     <a class="cta" href="tel:${socialLinks.phone1}"><i class="fa fa-phone" style="margin-right:8px"></i>${socialLinks.phone1}</a>
     <a class="cta" href="tel:${socialLinks.phone2}"><i class="fa fa-phone" style="margin-right:8px"></i>${socialLinks.phone2}</a>
@@ -1076,31 +1070,31 @@ function renderSocialHome() {
 // i18n
 // ---------------------------
 function applyTranslations(lang) {
-  document.querySelectorAll('[data-i18n]').forEach(node=>{
+  document.querySelectorAll('[data-i18n]').forEach(node => {
     const key = node.getAttribute('data-i18n');
-    if(i18n[lang] && i18n[lang][key]) {
+    if (i18n[lang] && i18n[lang][key]) {
       node.textContent = i18n[lang][key];
     }
   });
   document.body.setAttribute('data-lang', lang);
-  if(lang === 'ml'){
+  if (lang === 'ml') {
     document.body.classList.add('lang-ml');
     const brandTitle = document.getElementById('site-title');
-    if(brandTitle) brandTitle.textContent = 'നാഷണൽ സർവീസ് സ്കീം';
+    if (brandTitle) brandTitle.textContent = 'നാഷണൽ സർവീസ് സ്കീം';
     const brandSub = document.getElementById('site-sub');
-    if(brandSub) brandSub.textContent = 'യൂണിറ്റ് 256 — ശ്രീ നാരായണ ഹൈയർ സെക്കൻഡറി സ്‌കൂൾ ചിതറ';
+    if (brandSub) brandSub.textContent = 'യൂണിറ്റ് 256 — ശ്രീ നാരായണ ഹൈയർ സെക്കൻഡറി സ്‌കൂൾ ചിതറ';
   } else {
     document.body.classList.remove('lang-ml');
     const brandTitle = document.getElementById('site-title');
-    if(brandTitle) brandTitle.textContent = 'National Service Scheme';
+    if (brandTitle) brandTitle.textContent = 'National Service Scheme';
     const brandSub = document.getElementById('site-sub');
-    if(brandSub) brandSub.textContent = 'Unit 256 — Sree Narayana Higher Secondary School Chithara';
+    if (brandSub) brandSub.textContent = 'Unit 256 — Sree Narayana Higher Secondary School Chithara';
   }
-  document.querySelectorAll('.lang-btn').forEach(b=>{
-    if(b.id === `lang-${lang}`) {
-      b.setAttribute('aria-pressed','true');
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    if (b.id === `lang-${lang}`) {
+      b.setAttribute('aria-pressed', 'true');
     } else {
-      b.setAttribute('aria-pressed','false');
+      b.setAttribute('aria-pressed', 'false');
     }
   });
 }
@@ -1109,18 +1103,19 @@ function applyTranslations(lang) {
 // Initialization (async so we can await YouTube fetch)
 // ---------------------------
 async function init() {
-  // If API key and channel ID are provided, try to fetch latest videos
+  // Try to auto-fetch YouTube videos only if API key & channel ID are provided.
   if (YT_API_KEY && YT_CHANNEL_ID) {
     try {
       const fetched = await fetchYouTubeChannelVideos(YT_API_KEY, YT_CHANNEL_ID, YT_MAX_RESULTS);
       if (fetched && fetched.length) {
-        // replace videos list with fetched videos (keeps them as youtube type objects)
         videos = fetched;
       }
     } catch (err) {
       console.warn('Failed to fetch YouTube videos:', err);
     }
   }
+
+  // If you prefer the minimal helper usage, you can call fetchYouTubeVideosMinimal(YT_API_KEY, YT_CHANNEL_ID)
 
   // render components
   renderLatestPhotos();
@@ -1141,14 +1136,15 @@ async function init() {
   const storedLang = localStorage.getItem('nss_lang') || 'en';
   applyTranslations(storedLang);
 
-  if(enBtn) enBtn.addEventListener('click', ()=>{
-    localStorage.setItem('nss_lang','en');
+  if (enBtn) enBtn.addEventListener('click', () => {
+    localStorage.setItem('nss_lang', 'en');
     applyTranslations('en');
     document.body.style.fontFamily = '';
   });
-  if(mlBtn) mlBtn.addEventListener('click', ()=>{
-    localStorage.setItem('nss_lang','ml');
+  if (mlBtn) mlBtn.addEventListener('click', () => {
+    localStorage.setItem('nss_lang', 'ml');
     applyTranslations('ml');
+    document.body.style.fontFamily = "'Manjari', Arial, sans-serif";
   });
 }
 
