@@ -1,11 +1,24 @@
+// Merged and corrected script.js
+// - Combines the functionality from your original script.js and the minimal api.js helper
+// - Keeps your full volunteer arrays intact
+// - Optional YouTube auto-fetch using YT_API_KEY / YT_CHANNEL_ID (leave empty to disable)
+// - Caching, sanitization of YouTube IDs, robust fallback for file:// protocol (thumbnails + links)
+// - i18n + rendering for pages: index, about, images, videos
+//
+// Usage:
+//  - To enable auto-fetch of channel videos, set YT_API_KEY and YT_CHANNEL_ID below.
+//  - Serve the site over http(s) for embedded iframes to work. file:// will fall back to thumbnail links.
 
+// ---------------------------
+// Configuration
+// ---------------------------
 const YT_API_KEY = 'AIzaSyCmda7YFfugrv2oRsEwBuSpZoO5XGceGUk'; // <-- Put your YouTube Data API v3 key here (or leave empty to disable auto-fetch)
 const YT_CHANNEL_ID = 'UCNYUD1HguwfAJdn8d_gVZ_Q'; // <-- Put your channel's ID (starts with "UC...") here
 const YT_MAX_RESULTS = 16; // how many recent videos to fetch
 const YT_CACHE_TTL = 10 * 60 * 1000; // cache in ms (10 minutes)
 
 // ---------------------------
-// images (placeholder)
+// images (placeholder/demo)
 // ---------------------------
 const images = Array.from({ length: 20 }).map((_, i) => {
   const id = i + 1;
@@ -47,295 +60,295 @@ const secondYear = [
     id: '2Y-02',
     name: 'NAKSHATHRA B',
     class: '+2-Biology Science A (Leader)',
-    photo: 'images/volunteers/2024-26/2.PNG'
+    photo: 'images/volunteers/2024-26/2.png'
   },
   {
     id: '2Y-03',
     name: 'ABHIRAMI BS',
     class: '+2-Biology Science A',
-    photo: 'images/volunteers/2024-26/ABHIRAMI-BS.PNG'
+    photo: 'images/volunteers/2024-26/ABHIRAMI-BS.png'
   },
   {
     id: '2Y-04',
     name: 'ABHIJITH RD',
     class:'',
-    photo: 'images/volunteers/2024-26/ABHIJITH-RD.PNG'
+    photo: 'images/volunteers/2024-26/ABHIJITH-RD.png'
   },
   {
     id: '2Y-05',
     name: 'ABHINAV SL',
     class: '+2-Computer Science B',
-    photo: 'images/volunteers/2024-26/ABHINAV-SL.PNG'
+    photo: 'images/volunteers/2024-26/ABHINAV-SL.png'
   },
   {
     id: '2Y-06',
     name: 'ABHIRAM JAYAKUMAR',
     class: '+2-omputer Science A',
-    photo: 'images/volunteers/2024-26/ABHIRAM-JAYAKUMAR.PNG'
+    photo: 'images/volunteers/2024-26/ABHIRAM-JAYAKUMAR.png'
   },
   {
     id: '2Y-07',
     name: 'ABHISHEK S S',
     class: '+2-Humanities',
-    photo: 'images/volunteers/2024-26/ABHISHEK-SS.PNG'
+    photo: 'images/volunteers/2024-26/ABHISHEK-SS.png'
   },
   {
     id: '2Y-08',
     name: 'ABHISHEK V',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/ABHISHEK-V.PNG'
+    photo: 'images/volunteers/2024-26/ABHISHEK-V.png'
   },
   {
     id: '2Y-09',
     name: 'ADITHYAN VS',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/ADITHYAN-VS.PNG'
+    photo: 'images/volunteers/2024-26/ADITHYAN-VS.png'
   },
   {
     id: '2Y-10',
     name: 'AJMALSHA NB',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/AJMAL-SHA-NB.PNG'
+    photo: 'images/volunteers/2024-26/AJMAL-SHA-NB.png'
   },
   {
     id: '2Y-11',
     name: 'AKASH AS',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/AKASH-AS.PNG'
+    photo: 'images/volunteers/2024-26/AKASH-AS.png'
   },
   {
     id: '2Y-12',
     name: 'ALEENA F',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/ALEENA-F.PNG'
+    photo: 'images/volunteers/2024-26/ALEENA-F.png'
   },
   {
     id: '2Y-13',
     name: 'ALFIYA SS',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/ALFIYA-SS.PNG'
+    photo: 'images/volunteers/2024-26/ALFIYA-SS.png'
   },
   {
     id: '2Y-14',
     name: 'ALHUDA N',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/ALHUDA-N.PNG'
+    photo: 'images/volunteers/2024-26/ALHUDA-N.png'
   },
   {
     id: '2Y-15',
     name: 'AMAL LS',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/AMAL-LS.PNG'
+    photo: 'images/volunteers/2024-26/AMAL-LS.png'
   },
   {
     id: '2Y-16',
     name: 'ANAMIKA SB',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/ANAMIKA-SB.PNG'
+    photo: 'images/volunteers/2024-26/ANAMIKA-SB.png'
   },
   {
     id: '2Y-17',
     name: 'ANANYA SUJITH',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/ANANYA-SUJITH.PNG'
+    photo: 'images/volunteers/2024-26/ANANYA-SUJITH.png'
   },
   {
     id: '2Y-18',
     name: 'ANSALNA S',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/ANSALNA-S.PNG'
+    photo: 'images/volunteers/2024-26/ANSALNA-S.png'
   },
   {
     id: '2Y-19',
     name: 'ARDRA SR',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/ARDRA-SR.PNG'
+    photo: 'images/volunteers/2024-26/ARDRA-SR.png'
   },
   {
     id: '2Y-20',
     name: 'ARJUN RD',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/ARJUN-RD.PNG'
+    photo: 'images/volunteers/2024-26/ARJUN-RD.png'
   },
   {
     id: '2Y-21',
     name: 'ASIF N',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/ASIF-N.PNG'
+    photo: 'images/volunteers/2024-26/ASIF-N.png'
   },
   {
     id: '2Y-22',
     name: 'BHAMA N MANOJ',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/BHAMA-N-MANOJ.PNG'
+    photo: 'images/volunteers/2024-26/BHAMA-N-MANOJ.png'
   },
   {
     id: '2Y-23',
     name: 'BIBIN KRISHNA B',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/BIBIN-KRISHNA-B.PNG'
+    photo: 'images/volunteers/2024-26/BIBIN-KRISHNA-B.png'
   },
   {
     id: '2Y-24',
     name: 'BLESSY MERIN JOY',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/BLESSY-MERIN-JOY.PNG'
+    photo: 'images/volunteers/2024-26/BLESSY-MERIN-JOY.png'
   },
   {
     id: '2Y-25',
     name: 'DEVIKA AS',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/DEVIKA-AS.PNG'
+    photo: 'images/volunteers/2024-26/DEVIKA-AS.png'
   },
   {
     id: '2Y-26',
     name: 'DEVIKA V',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/DEVIKA-V.PNG'
+    photo: 'images/volunteers/2024-26/DEVIKA-V.png'
   },
   {
     id: '2Y-27',
     name: 'DIYA SALIM',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/DIYA-SALIM.PNG'
+    photo: 'images/volunteers/2024-26/DIYA-SALIM.png'
   },
   {
     id: '2Y-28',
     name: 'DIYAJITH S',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/DIYAJITH-S.PNG'
+    photo: 'images/volunteers/2024-26/DIYAJITH-S.png'
   },
   {
     id: '2Y-29',
     name: 'DRISHYA PRASANTH',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/DRISHYA-PRASANTH.PNG'
+    photo: 'images/volunteers/2024-26/DRISHYA-PRASANTH.png'
   },
   {
     id: '2Y-30',
     name: 'GOURI DEVANANDA P',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/GOURI-DEVANANDA-P.PNG'
+    photo: 'images/volunteers/2024-26/GOURI-DEVANANDA-P.png'
   },
   {
     id: '2Y-31',
     name: 'GOURI S NAIR',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/GOURI-S-NAIR.PNG'
+    photo: 'images/volunteers/2024-26/GOURI-S-NAIR.png'
   },
   {
     id: '2Y-32',
     name: 'IRFAN S SIDHEEK',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/IRFAN-S-SIDHEEK.PNG'
+    photo: 'images/volunteers/2024-26/IRFAN-S-SIDHEEK.png'
   },
   {
     id: '2Y-33',
     name: 'KEERTHI MS',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/KEERTHI-MS.PNG'
+    photo: 'images/volunteers/2024-26/KEERTHI-MS.png'
   },
   {
     id: '2Y-34',
     name: 'MIDHUNA BM',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/MIDHUNA-BM.PNG'
+    photo: 'images/volunteers/2024-26/MIDHUNA-BM.png'
   },
   {
     id: '2Y-35',
     name: 'MINHA SHAFI',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/MINHA-SHAFI.PNG'
+    photo: 'images/volunteers/2024-26/MINHA-SHAFI.png'
   },
   {
     id: '2Y-36',
     name: 'MUHAMMED ADIL B',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/MUHAMMED-ADIL-B.PNG'
+    photo: 'images/volunteers/2024-26/MUHAMMED-ADIL-B.png'
   },
   {
     id: '2Y-37',
     name: 'MUHAMMED ALTHAF A',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/MUHAMMED-ALTHAF-A.PNG'
+    photo: 'images/volunteers/2024-26/MUHAMMED-ALTHAF-A.png'
   },
   {
     id: '2Y-38',
     name: 'MUHAMMED ASIF S',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/MUHAMMED-ASIF-S.PNG'
+    photo: 'images/volunteers/2024-26/MUHAMMED-ASIF-S.png'
   },
   {
     id: '2Y-39',
     name: 'MOHAMMED IMDAD',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/MOHAMMED-IMDAD.PNG'
+    photo: 'images/volunteers/2024-26/MOHAMMED-IMDAD.png'
   },
   {
     id: '2Y-40',
     name: 'MUHAMMED NAHSIN N',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/MUHAMMAD-NAHSIN-N.PNG'
+    photo: 'images/volunteers/2024-26/MUHAMMAD-NAHSIN-N.png'
   },
   {
     id: '2Y-41',
     name: 'MUHAMMAD NOUFAL Z',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/MUHAMMAD-NOUFAL-Z.PNG'
+    photo: 'images/volunteers/2024-26/MUHAMMAD-NOUFAL-Z.png'
   },
   {
     id: '2Y-42',
     name: 'MUHAMMED SAFEER S',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/MUHAMMED-SAFEER-S.PNG'
+    photo: 'images/volunteers/2024-26/MUHAMMED-SAFEER-S.png'
   },
   {
     id: '2Y-43',
     name: 'MUHAMMED SAFIN SS',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/MUHAMMED-SAFIN-SS.PNG'
+    photo: 'images/volunteers/2024-26/MUHAMMED-SAFIN-SS.png'
   },
   {
     id: '2Y-44',
     name: 'NANDANA S',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/NANDANA-S.PNG'
+    photo: 'images/volunteers/2024-26/NANDANA-S.png'
   },
   {
     id: '2Y-45',
     name: 'NIHAL MUHAMMAD F',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/NIHAL-MUHAMMAD-F.PNG'
+    photo: 'images/volunteers/2024-26/NIHAL-MUHAMMAD-F.png'
   },
   {
     id: '2Y-46',
     name: 'SANA FATHIMA',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/SANA-FATHIMA.PNG'
+    photo: 'images/volunteers/2024-26/SANA-FATHIMA.png'
   },
   {
     id: '2Y-47',
     name: 'SANA FATHIMA S',
     class: '+2 Biology Science B',
-    photo: 'images/volunteers/2024-26/SANA-FATHIMA-S.PNG'
+    photo: 'images/volunteers/2024-26/SANA-FATHIMA-S.png'
   },
   {
     id: '2Y-48',
     name: 'SREEHARI D',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/SREEHARI-D.PNG'
+    photo: 'images/volunteers/2024-26/SREEHARI-D.png'
   },
   {
     id: '2Y-49',
     name: 'THASNIYA JAFAR S',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/THASNIYA-JAFAR-S.PNG'
+    photo: 'images/volunteers/2024-26/THASNIYA-JAFAR-S.png'
   },
   {
     id: '2Y-50',
     name: 'VISHAK V',
     class: '12-C',
-    photo: 'images/volunteers/2024-26/VISHAK-V.PNG'
+    photo: 'images/volunteers/2024-26/VISHAK-V.png'
   }
 ];
 
@@ -646,10 +659,10 @@ const firstYear = [
 // Leadership & Social links
 // ---------------------------
 const leadership = {
-  manager:{ name: 'Mr.Vellapally Natesan', photo:'images/lead/Vellapally-Natesan.jpeg'},
-  programOfficer: { name: 'Mr. Priji Gopinath', photo: 'images/lead' },
+  manager: { name: 'Mr. Vellapally Natesan', photo:'images/lead/Vellapally-Natesan.jpeg' },
+  programOfficer: { name: 'Mr. Priji Gopinath', photo: 'images/lead/priji-gopinath.jpeg' },
   principal: { name: 'Mrs. Beena V S', photo: 'images/lead' },
-  md: { name: 'Mr. Pachayil Sandeep', photo: 'images/lead' }
+  md: { name: 'Mr. Pachayil Sandeep', photo: 'images/lead/pachayil-sandeep.jpeg' }
 };
 
 const socialLinks = {
@@ -678,7 +691,7 @@ const i18n = {
     'callout.title': 'Join Us / Contact',
     'callout.text': 'Unit 256 at Sree Narayana HSS Chithara is active year-round. Volunteers meet for regular activities and special community projects. Use the About page to find contacts and social links.',
     'about.leadershipTitle': 'Leadership',
-    'about.manager.title':'General Manager'
+    'about.manager.title':'General Manager',
     'about.programOfficer.title': 'Program Officer (NSS)',
     'about.principal.title': 'Principal',
     'about.md.title': 'SNDP Yogam Councillor',
@@ -686,9 +699,9 @@ const i18n = {
     'about.contact.phone': 'Phone',
     'about.contact.email': 'Email',
     'about.secondYear.title': '2nd Year NSS Volunteers',
-    'about.secondYear.desc': '50 students. Each card shows photo, name and class. (Data is placeholder for demonstration.)',
+    'about.secondYear.desc': '50 students. Each card shows photo, name and class.',
     'about.firstYear.title': '1st Year NSS Volunteers',
-    'about.firstYear.desc': '50 students. Each card shows photo, name and class. (Data is placeholder for demonstration.)',
+    'about.firstYear.desc': '50 students. Each card shows photo, name and class.',
     'images.title': 'Gallery',
     'images.desc': 'A collection of photos from our events and activities. Click to view larger.',
     'images.videosTab': 'Videos',
@@ -702,17 +715,17 @@ const i18n = {
     'nav.images': 'ഫോട്ടോകൾ',
     'nav.videos': 'വീഡിയോസ്',
     'history.title': 'നാഷണൽ സർവീസ് സ്കീമിന്റെ ചരിത്രം',
-    'history.text': 'നാഷണൽ സർവീസ് സ്കീം (NSS) 1969-ൽ ആരംഭിക്കുകയും കമ്മ്യൂണിറ്റി സേവനത്തിലൂടെ വിദ്യാർത്ഥികളുടെ വ്യക്തിത്വത്തെ വളർത്തുക എന്ന ലക്ഷ്യത്തോടെ പ്രവർത്തിക്കുകയും ചെയ്യുന്നു. NSS യുവജനങ്ങളിൽ സാമൂഹിക ഉത്തരവാദിത്തം, നേതൃത്വ കഴിവുകൾ, പൗരബോധം എന്നിവ വളർത്തുന്നതിനായി വിവിധ പ്രവർത്തനങ്ങളിലൂടെ അവരെ സജ്ജരാക്കുന്നു.',
+    'history.text': 'നാഷണൽ സർവീസ് സ്കീം (NSS) 1969-ൽ ആരംഭിക്കുകയും കമ്മ്യൂണിറ്റി സേവനത്തിലൂടെ വിദ്യാർത്ഥികളുടെ വ്യക്തിത്വത്തെ വളർത്തുക എന്ന ലക്ഷ്യത്തോടെ പ്രവർത്തിക്കുകയും ചെയ്യുന്നു. NSS യുവജനങ്ങളിൽ സാമൂഹിക ഉത്തരവാദിത്തം, നേതృ കഴിവുകൾ, പൗരബോധം എന്നിവ വളർത്തുന്നതിനായി വിവിധ പ്രവർത്തനങ്ങളിലൂടെ അവരെ പങ്കെടുപ്പിക്കുന്നു.',
     'history.cta': 'ഞങ്ങളേക്കുറിച്ച് കൂടുതൽ അറിയൂ',
-    'latest.photos': 'പുതിയ ഫോടോകൾ',
-    'latest.videos': 'പുതിയ വീഡിയോകൾ',
-    'callout.title': 'ഞങ്ങളെ ബന്ധപ്പെടുക',
-    'callout.text': 'ശ്രീ നാരായണ ഹൈയർ സെക്കൻഡറി സ്കൂൾ ചിതറയിലെ യൂണിറ്റ് 256 വർഷം മുഴുവൻ സജീവമാണ്. വോളണ്ടിയർമാർ സ്ഥിരമായി പരിപാടികളിലും സമൂഹിക പ്രവർത്തനങ്ങളിലും പങ്കെടുക്കുന്നു. വിവരങ്ങൾക്കായി About പേജ് കാണുക.',
+    'latest.photos': 'പുതിയ അഞ്ച് ഫോടോകൾ',
+    'latest.videos': 'പുതിയ അഞ്ച് വീഡിയോകൾ',
+    'callout.title': 'ഞങ്ങളോട് ചേർതടുക്കുക / ബന്ധപ്പെടുക',
+    'callout.text': 'ശ്രീ നാരായണ ഹൈയർ സെക്കൻഡറി സ്കൂൾ ചിതറയിലെ യൂണിറ്റ് 256 വർഷം മുഴുവൻ സജീവമാണ്. വോളണ്ടിയർമാർ സ്ഥിരമായി പരിപാടികളിലും സമൂഹ പരിപാടികളിലും പങ്കെടുക്കുന്നു. വിവരങ്ങൾക്കായി About പേജ് കാണുക.',
     'about.leadershipTitle': 'മേധാവിമാർ',
-    'about.manager.title':  'ജനറൽ മാനേജർ',
+    'about.manager.title':'ജനറൽ മാനേജർ',
     'about.programOfficer.title': 'പ്രോഗ്രാം ഓഫീസർ (NSS)',
     'about.principal.title': 'പ്രിൻസിപ്പൽ',
-    'about.md.title': 'മെനേജിംഗ് ഡയറക്ടർ',
+    'about.md.title': 'എസ്. എൻ . ഡി . പി യോഗം കൗൺസിലർ',
     'about.contact.title': 'ബന്ധപ്പെടാം & സോഷ്യൽ',
     'about.contact.phone': 'ഫോൺ',
     'about.contact.email': 'ഇമെയിൽ',
@@ -725,7 +738,7 @@ const i18n = {
     'images.videosTab': 'വീഡിയോസ്',
     'images.videosDesc': 'വീഡിയോസ് ഇവിടെ ഉൾപ്പെടുത്തിയിരിക്കുന്നു. പ്ലേ ചെയ്യാൻ ക്ലിക്ക് ചെയ്യൂ.',
     'videos.title': 'എല്ലാ വീഡിയോകളും',
-    'videos.desc': 'ഈവന്റുകൾ, കമ്മ്യൂണിറ്റി പ്രവർത്തനങ്ങൾ, ബോധവൽക്കരണ പ്രവർത്തനങ്ങൾ എന്നിവയുടെ റെക്കോർഡിംഗുകൾ കാണുക.'
+    'videos.desc': 'ഈവന്റുകൾ, അവബോധ പരിപാടികൾ, സാമൂഹിക പ്രവർത്തനങ്ങൾ എന്നിവയുടെ റെക്കോർഡിംഗുകൾ കാണുക.'
   }
 };
 
@@ -958,7 +971,7 @@ function renderLatestPhotos() {
   const target = $('#latest-photos');
   if (!target) return;
   target.innerHTML = '';
-  const latestPhotos = latest(images, 5);
+  const latestPhotos = latest(images, 8);
   latestPhotos.forEach(img => {
     const a = document.createElement('a');
     a.href = img.src;
@@ -974,7 +987,7 @@ function renderLatestVideos() {
   const target = $('#latest-videos');
   if (!target) return;
   target.innerHTML = '';
-  const latestV = latest(videos, 5);
+  const latestV = latest(videos, 8);
   latestV.forEach(raw => {
     const card = createVideoCard(raw);
     target.appendChild(card);
@@ -1030,7 +1043,7 @@ function renderVolunteers() {
     const img = el.querySelector('img');
     if (img) {
       img.addEventListener('error', () => {
-        img.src = '/images/activities/';
+        img.src = 'images/activities/';
       });
     }
     return el;
