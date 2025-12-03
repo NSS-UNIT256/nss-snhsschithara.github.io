@@ -1,11 +1,24 @@
+// Merged and corrected script.js
+// - Combines the functionality from your original script.js and the minimal api.js helper
+// - Keeps your full volunteer arrays intact
+// - Optional YouTube auto-fetch using YT_API_KEY / YT_CHANNEL_ID (leave empty to disable)
+// - Caching, sanitization of YouTube IDs, robust fallback for file:// protocol (thumbnails + links)
+// - i18n + rendering for pages: index, about, images, videos
+//
+// Usage:
+//  - To enable auto-fetch of channel videos, set YT_API_KEY and YT_CHANNEL_ID below.
+//  - Serve the site over http(s) for embedded iframes to work. file:// will fall back to thumbnail links.
 
-const YT_API_KEY = 'AIzaSyCmda7YFfugrv2oRsEwBuSpZoO5XGceGUk'; // <-- Put your YouTube Data API v3 key here (or leave empty to disable auto-fetch)
-const YT_CHANNEL_ID = 'UCNYUD1HguwfAJdn8d_gVZ_Q'; // <-- Put your channel's ID (starts with "UC...") here
-const YT_MAX_RESULTS = 16; // how many recent videos to fetch
+// ---------------------------
+// Configuration
+// ---------------------------
+const YT_API_KEY = ''; // <-- Put your YouTube Data API v3 key here (or leave empty to disable auto-fetch)
+const YT_CHANNEL_ID = ''; // <-- Put your channel's ID (starts with "UC...") here
+const YT_MAX_RESULTS = 12; // how many recent videos to fetch
 const YT_CACHE_TTL = 10 * 60 * 1000; // cache in ms (10 minutes)
 
 // ---------------------------
-// images (placeholder)
+// images (placeholder/demo)
 // ---------------------------
 const images = Array.from({ length: 20 }).map((_, i) => {
   const id = i + 1;
@@ -47,7 +60,7 @@ const secondYear = [
     id: '2Y-02',
     name: 'NAKSHATHRA B',
     class: '+2-Biology Science A (Leader)',
-    photo: 'images/volunteers/2024-26/2.PNG'
+    photo: 'images/volunteers/2024-26/2.png'
   },
   {
     id: '2Y-03',
@@ -646,7 +659,6 @@ const firstYear = [
 // Leadership & Social links
 // ---------------------------
 const leadership = {
-  manager:{ name: 'Mr.Vellapally Natesan', photo:'images/lead/Vellapally-Natesan.jpeg'},
   programOfficer: { name: 'Mr. Priji Gopinath', photo: 'images/lead' },
   principal: { name: 'Mrs. Beena V S', photo: 'images/lead' },
   md: { name: 'Mr. Pachayil Sandeep', photo: 'images/lead' }
@@ -678,10 +690,9 @@ const i18n = {
     'callout.title': 'Join Us / Contact',
     'callout.text': 'Unit 256 at Sree Narayana HSS Chithara is active year-round. Volunteers meet for regular activities and special community projects. Use the About page to find contacts and social links.',
     'about.leadershipTitle': 'Leadership',
-    'about.manager.title':'General Manager'
     'about.programOfficer.title': 'Program Officer (NSS)',
     'about.principal.title': 'Principal',
-    'about.md.title': 'SNDP Yogam Councillor',
+    'about.md.title': 'Managing Director',
     'about.contact.title': 'Contact & Social',
     'about.contact.phone': 'Phone',
     'about.contact.email': 'Email',
@@ -702,14 +713,13 @@ const i18n = {
     'nav.images': 'ഫോട്ടോകൾ',
     'nav.videos': 'വീഡിയോസ്',
     'history.title': 'നാഷണൽ സർവീസ് സ്കീമിന്റെ ചരിത്രം',
-    'history.text': 'നാഷണൽ സർവീസ് സ്കീം (NSS) 1969-ൽ ആരംഭിക്കുകയും കമ്മ്യൂണിറ്റി സേവനത്തിലൂടെ വിദ്യാർത്ഥികളുടെ വ്യക്തിത്വത്തെ വളർത്തുക എന്ന ലക്ഷ്യത്തോടെ പ്രവർത്തിക്കുകയും ചെയ്യുന്നു. NSS യുവജനങ്ങളിൽ സാമൂഹിക ഉത്തരവാദിത്തം, നേതൃത്വ കഴിവുകൾ, പൗരബോധം എന്നിവ വളർത്തുന്നതിനായി വിവിധ പ്രവർത്തനങ്ങളിലൂടെ അവരെ സജ്ജരാക്കുന്നു.',
+    'history.text': 'നാഷണൽ സർവീസ് സ്കീം (NSS) 1969-ൽ ആരംഭിക്കുകയും കമ്മ്യൂണിറ്റി സേവനത്തിലൂടെ വിദ്യാർത്ഥികളുടെ വ്യക്തിത്വത്തെ വളർത്തുക എന്ന ലക്ഷ്യത്തോടെ പ്രവർത്തിക്കുകയും ചെയ്യുന്നു. NSS യുവജനങ്ങളിൽ സാമൂഹിക ഉത്തരവാദിത്തം, നേതృ കഴിവുകൾ, പൗരബോധം എന്നിവ വളർത്തുന്നതിനായി വിവിധ പ്രവർത്തനങ്ങളിലൂടെ അവരെ പങ്കെടുപ്പിക്കുന്നു.',
     'history.cta': 'ഞങ്ങളേക്കുറിച്ച് കൂടുതൽ അറിയൂ',
-    'latest.photos': 'പുതിയ ഫോടോകൾ',
-    'latest.videos': 'പുതിയ വീഡിയോകൾ',
-    'callout.title': 'ഞങ്ങളെ ബന്ധപ്പെടുക',
-    'callout.text': 'ശ്രീ നാരായണ ഹൈയർ സെക്കൻഡറി സ്കൂൾ ചിതറയിലെ യൂണിറ്റ് 256 വർഷം മുഴുവൻ സജീവമാണ്. വോളണ്ടിയർമാർ സ്ഥിരമായി പരിപാടികളിലും സമൂഹിക പ്രവർത്തനങ്ങളിലും പങ്കെടുക്കുന്നു. വിവരങ്ങൾക്കായി About പേജ് കാണുക.',
+    'latest.photos': 'പുതിയ അഞ്ച് ഫോടോകൾ',
+    'latest.videos': 'പുതിയ അഞ്ച് വീഡിയോകൾ',
+    'callout.title': 'ഞങ്ങളോട് ചേർതടുക്കുക / ബന്ധപ്പെടുക',
+    'callout.text': 'ശ്രീ നാരായണ ഹൈയർ സെക്കൻഡറി സ്കൂൾ ചിതറയിലെ യൂണിറ്റ് 256 വർഷം മുഴുവൻ സജീവമാണ്. വോളണ്ടിയർമാർ സ്ഥിരമായി പരിപാടികളിലും സമൂഹ പരിപാടികളിലും പങ്കെടുക്കുന്നു. വിവരങ്ങൾക്കായി About പേജ് കാണുക.',
     'about.leadershipTitle': 'മേധാവിമാർ',
-    'about.manager.title':  'ജനറൽ മാനേജർ',
     'about.programOfficer.title': 'പ്രോഗ്രാം ഓഫീസർ (NSS)',
     'about.principal.title': 'പ്രിൻസിപ്പൽ',
     'about.md.title': 'മെനേജിംഗ് ഡയറക്ടർ',
@@ -725,7 +735,7 @@ const i18n = {
     'images.videosTab': 'വീഡിയോസ്',
     'images.videosDesc': 'വീഡിയോസ് ഇവിടെ ഉൾപ്പെടുത്തിയിരിക്കുന്നു. പ്ലേ ചെയ്യാൻ ക്ലിക്ക് ചെയ്യൂ.',
     'videos.title': 'എല്ലാ വീഡിയോകളും',
-    'videos.desc': 'ഈവന്റുകൾ, കമ്മ്യൂണിറ്റി പ്രവർത്തനങ്ങൾ, ബോധവൽക്കരണ പ്രവർത്തനങ്ങൾ എന്നിവയുടെ റെക്കോർഡിംഗുകൾ കാണുക.'
+    'videos.desc': 'ഈവന്റുകൾ, അവബോധ പരിപാടികൾ, المجتمع പ്രവർത്തനങ്ങളുടെ റെക്കോർഡിംഗുകൾ കാണുക.'
   }
 };
 
@@ -1030,7 +1040,7 @@ function renderVolunteers() {
     const img = el.querySelector('img');
     if (img) {
       img.addEventListener('error', () => {
-        img.src = '/images/activities/';
+        img.src = 'https://picsum.photos/seed/fallback/400/300';
       });
     }
     return el;
