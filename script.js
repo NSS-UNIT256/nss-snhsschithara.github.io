@@ -27,7 +27,7 @@ const images = Array.from({ length: 20 }).map((_, i) => {
     title: `NSS Event Photo ${id}`,
     // Placeholder service so the gallery doesn't show broken images.
     // Replace with local paths like 'images/events/1.jpg' if you have them.
-    src: `https://picsum.photos/seed/nss-${id}/800/600`,
+    src: `images/activities/`,
     date: new Date(Date.UTC(2025, 10, Math.max(1, 28 - i))).toISOString()
   };
 });
