@@ -646,6 +646,7 @@ const firstYear = [
 // Leadership & Social links
 // ---------------------------
 const leadership = {
+  manager:{ name: 'Mr.Vellapally Natesan', photo:'images/lead/Vellapally-Natesan.jpeg'},
   programOfficer: { name: 'Mr. Priji Gopinath', photo: 'images/lead' },
   principal: { name: 'Mrs. Beena V S', photo: 'images/lead' },
   md: { name: 'Mr. Pachayil Sandeep', photo: 'images/lead' }
