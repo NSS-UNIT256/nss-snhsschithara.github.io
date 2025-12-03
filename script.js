@@ -1,24 +1,11 @@
-// Merged and corrected script.js
-// - Combines the functionality from your original script.js and the minimal api.js helper
-// - Keeps your full volunteer arrays intact
-// - Optional YouTube auto-fetch using YT_API_KEY / YT_CHANNEL_ID (leave empty to disable)
-// - Caching, sanitization of YouTube IDs, robust fallback for file:// protocol (thumbnails + links)
-// - i18n + rendering for pages: index, about, images, videos
-//
-// Usage:
-//  - To enable auto-fetch of channel videos, set YT_API_KEY and YT_CHANNEL_ID below.
-//  - Serve the site over http(s) for embedded iframes to work. file:// will fall back to thumbnail links.
 
-// ---------------------------
-// Configuration
-// ---------------------------
 const YT_API_KEY = 'AIzaSyCmda7YFfugrv2oRsEwBuSpZoO5XGceGUk'; // <-- Put your YouTube Data API v3 key here (or leave empty to disable auto-fetch)
 const YT_CHANNEL_ID = 'UCNYUD1HguwfAJdn8d_gVZ_Q'; // <-- Put your channel's ID (starts with "UC...") here
 const YT_MAX_RESULTS = 16; // how many recent videos to fetch
 const YT_CACHE_TTL = 10 * 60 * 1000; // cache in ms (10 minutes)
 
 // ---------------------------
-// images (placeholder/demo)
+// images (placeholder)
 // ---------------------------
 const images = Array.from({ length: 20 }).map((_, i) => {
   const id = i + 1;
@@ -713,12 +700,12 @@ const i18n = {
     'nav.images': 'ഫോട്ടോകൾ',
     'nav.videos': 'വീഡിയോസ്',
     'history.title': 'നാഷണൽ സർവീസ് സ്കീമിന്റെ ചരിത്രം',
-    'history.text': 'നാഷണൽ സർവീസ് സ്കീം (NSS) 1969-ൽ ആരംഭിക്കുകയും കമ്മ്യൂണിറ്റി സേവനത്തിലൂടെ വിദ്യാർത്ഥികളുടെ വ്യക്തിത്വത്തെ വളർത്തുക എന്ന ലക്ഷ്യത്തോടെ പ്രവർത്തിക്കുകയും ചെയ്യുന്നു. NSS യുവജനങ്ങളിൽ സാമൂഹിക ഉത്തരവാദിത്തം, നേതృ കഴിവുകൾ, പൗരബോധം എന്നിവ വളർത്തുന്നതിനായി വിവിധ പ്രവർത്തനങ്ങളിലൂടെ അവരെ പങ്കെടുപ്പിക്കുന്നു.',
+    'history.text': 'നാഷണൽ സർവീസ് സ്കീം (NSS) 1969-ൽ ആരംഭിക്കുകയും കമ്മ്യൂണിറ്റി സേവനത്തിലൂടെ വിദ്യാർത്ഥികളുടെ വ്യക്തിത്വത്തെ വളർത്തുക എന്ന ലക്ഷ്യത്തോടെ പ്രവർത്തിക്കുകയും ചെയ്യുന്നു. NSS യുവജനങ്ങളിൽ സാമൂഹിക ഉത്തരവാദിത്തം, നേതൃത്വ കഴിവുകൾ, പൗരബോധം എന്നിവ വളർത്തുന്നതിനായി വിവിധ പ്രവർത്തനങ്ങളിലൂടെ അവരെ സജ്ജരാക്കുന്നു.',
     'history.cta': 'ഞങ്ങളേക്കുറിച്ച് കൂടുതൽ അറിയൂ',
-    'latest.photos': 'പുതിയ അഞ്ച് ഫോടോകൾ',
-    'latest.videos': 'പുതിയ അഞ്ച് വീഡിയോകൾ',
-    'callout.title': 'ഞങ്ങളോട് ചേർതടുക്കുക / ബന്ധപ്പെടുക',
-    'callout.text': 'ശ്രീ നാരായണ ഹൈയർ സെക്കൻഡറി സ്കൂൾ ചിതറയിലെ യൂണിറ്റ് 256 വർഷം മുഴുവൻ സജീവമാണ്. വോളണ്ടിയർമാർ സ്ഥിരമായി പരിപാടികളിലും സമൂഹ പരിപാടികളിലും പങ്കെടുക്കുന്നു. വിവരങ്ങൾക്കായി About പേജ് കാണുക.',
+    'latest.photos': 'പുതിയ ഫോടോകൾ',
+    'latest.videos': 'പുതിയ വീഡിയോകൾ',
+    'callout.title': 'ഞങ്ങളെ ബന്ധപ്പെടുക',
+    'callout.text': 'ശ്രീ നാരായണ ഹൈയർ സെക്കൻഡറി സ്കൂൾ ചിതറയിലെ യൂണിറ്റ് 256 വർഷം മുഴുവൻ സജീവമാണ്. വോളണ്ടിയർമാർ സ്ഥിരമായി പരിപാടികളിലും സമൂഹിക പ്രവർത്തനങ്ങളിലും പങ്കെടുക്കുന്നു. വിവരങ്ങൾക്കായി About പേജ് കാണുക.',
     'about.leadershipTitle': 'മേധാവിമാർ',
     'about.programOfficer.title': 'പ്രോഗ്രാം ഓഫീസർ (NSS)',
     'about.principal.title': 'പ്രിൻസിപ്പൽ',
