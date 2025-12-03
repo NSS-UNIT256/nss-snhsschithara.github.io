@@ -681,40 +681,7 @@ const i18n = {
     'about.manager.title':'General Manager'
     'about.programOfficer.title': 'Program Officer (NSS)',
     'about.principal.title': 'Principal',
-    'about.md.title': 'Managing Director',
-    'about.contact.title': 'Contact & Social',
-    'about.contact.phone': 'Phone',
-    'about.contact.email': 'Email',
-    'about.secondYear.title': '2nd Year NSS Volunteers',
-    'about.secondYear.desc': '50 students. Each card shows photo, name and class. (Data is placeholder for demonstration.)',
-    'about.firstYear.title': '1st Year NSS Volunteers',
-    'about.firstYear.desc': '50 students. Each card shows photo, name and class. (Data is placeholder for demonstration.)',
-    'images.title': 'Gallery',
-    'images.desc': 'A collection of photos from our events and activities. Click to view larger.',
-    'images.videosTab': 'Videos',
-    'images.videosDesc': 'Embedded videos of our activities. Click play to watch.',
-    'videos.title': 'All Videos',
-    'videos.desc': 'Watch recordings of events, awareness programs, and community activities.'
-  },
-  ml: {
-    'nav.home': 'ഹോം',
-    'nav.about': 'ഞങ്ങളെക്കുറിച്ച്',
-    'nav.images': 'ഫോട്ടോകൾ',
-    'nav.videos': 'വീഡിയോസ്',
-    'history.title': 'നാഷണൽ സർവീസ് സ്കീമിന്റെ ചരിത്രം',
-    'history.text': 'നാഷണൽ സർവീസ് സ്കീം (NSS) 1969-ൽ ആരംഭിക്കുകയും കമ്മ്യൂണിറ്റി സേവനത്തിലൂടെ വിദ്യാർത്ഥികളുടെ വ്യക്തിത്വത്തെ വളർത്തുക എന്ന ലക്ഷ്യത്തോടെ പ്രവർത്തിക്കുകയും ചെയ്യുന്നു. NSS യുവജനങ്ങളിൽ സാമൂഹിക ഉത്തരവാദിത്തം, നേതൃത്വ കഴിവുകൾ, പൗരബോധം എന്നിവ വളർത്തുന്നതിനായി വിവിധ പ്രവർത്തനങ്ങളിലൂടെ അവരെ സജ്ജരാക്കുന്നു.',
-    'history.cta': 'ഞങ്ങളേക്കുറിച്ച് കൂടുതൽ അറിയൂ',
-    'latest.photos': 'പുതിയ ഫോടോകൾ',
-    'latest.videos': 'പുതിയ വീഡിയോകൾ',
-    'callout.title': 'ഞങ്ങളെ ബന്ധപ്പെടുക',
-    'callout.text': 'ശ്രീ നാരായണ ഹൈയർ സെക്കൻഡറി സ്കൂൾ ചിതറയിലെ യൂണിറ്റ് 256 വർഷം മുഴുവൻ സജീവമാണ്. വോളണ്ടിയർമാർ സ്ഥിരമായി പരിപാടികളിലും സമൂഹിക പ്രവർത്തനങ്ങളിലും പങ്കെടുക്കുന്നു. വിവരങ്ങൾക്കായി About പേജ് കാണുക.',
-    'about.leadershipTitle': 'മേധാവിമാർ',
-    'about.manager.title': generalt 256 at Sree Narayana HSS Chithara is active year-round. Volunteers meet for regular activities and special community projects. Use the About page to find contacts and social links.',
-    'about.leadershipTitle': 'Leadership',
-    'about.manager.title':'General Manager'
-    'about.programOfficer.title': 'Program Officer (NSS)',
-    'about.principal.title': 'Principal',
-    'about.md.title': 'Managing Director',
+    'about.md.title': 'SNDP Yogam Councillor',
     'about.contact.title': 'Contact & Social',
     'about.contact.phone': 'Phone',
     'about.contact.email': 'Email',
@@ -758,7 +725,7 @@ const i18n = {
     'images.videosTab': 'വീഡിയോസ്',
     'images.videosDesc': 'വീഡിയോസ് ഇവിടെ ഉൾപ്പെടുത്തിയിരിക്കുന്നു. പ്ലേ ചെയ്യാൻ ക്ലിക്ക് ചെയ്യൂ.',
     'videos.title': 'എല്ലാ വീഡിയോകളും',
-    'videos.desc': 'ഈവന്റുകൾ, അവബോധ പരിപാടികൾ, المجتمع പ്രവർത്തനങ്ങളുടെ റെക്കോർഡിംഗുകൾ കാണുക.'
+    'videos.desc': 'ഈവന്റുകൾ, കമ്മ്യൂണിറ്റി പ്രവർത്തനങ്ങൾ, ബോധവൽക്കരണ പ്രവർത്തനങ്ങൾ എന്നിവയുടെ റെക്കോർഡിംഗുകൾ കാണുക.'
   }
 };
 
@@ -1063,7 +1030,7 @@ function renderVolunteers() {
     const img = el.querySelector('img');
     if (img) {
       img.addEventListener('error', () => {
-        img.src = 'https://picsum.photos/seed/fallback/400/300';
+        img.src = '/images/activities/';
       });
     }
     return el;
