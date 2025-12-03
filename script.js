@@ -381,7 +381,7 @@ const firstYear = [
     id: '1Y-02',
     name: 'AFSANA S SHAIJU',
     class: '+1-Biology Science B (Leader)',
-    photo: 'images/volunteers/2025-27/2.jpeg'
+    photo: 'images/volunteers/2025-27/2.JPEG'
   },
     {
         id: '1Y-03',
