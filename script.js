@@ -14,7 +14,7 @@
 // ---------------------------
 const YT_API_KEY = 'AIzaSyCmda7YFfugrv2oRsEwBuSpZoO5XGceGUk'; // <-- Put your YouTube Data API v3 key here (or leave empty to disable auto-fetch)
 const YT_CHANNEL_ID = 'UCNYUD1HguwfAJdn8d_gVZ_Q'; // <-- Put your channel's ID (starts with "UC...") here
-const YT_MAX_RESULTS = 12; // how many recent videos to fetch
+const YT_MAX_RESULTS = 16; // how many recent videos to fetch
 const YT_CACHE_TTL = 10 * 60 * 1000; // cache in ms (10 minutes)
 
 // ---------------------------
