@@ -971,7 +971,7 @@ function renderLatestPhotos() {
   const target = $('#latest-photos');
   if (!target) return;
   target.innerHTML = '';
-  const latestPhotos = latest(images, 8);
+  const latestPhotos = latest(images, 12);
   latestPhotos.forEach(img => {
     const a = document.createElement('a');
     a.href = img.src;
